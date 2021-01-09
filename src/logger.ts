@@ -1,3 +1,5 @@
+// Simple Logger for server app, defaults to weekly file rotation
+
 import winston, {format} from 'winston';
 import DailyRotateFile = require('winston-daily-rotate-file')
 
@@ -11,7 +13,6 @@ interface Log{
 const formatter = format.printf(info => {
     return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
 });
-
 
 class DailyLogger implements Log {
     private logger: winston.Logger

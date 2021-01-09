@@ -5,8 +5,6 @@ import Logger from './logger'
 import bodyParser from "body-parser";
 import './DB/database';
 import settings from './settings';
-import Sesja from './Models/SesjaModel'
-import mongoose from 'mongoose';
 import userRouter from './Routes/Sesja';
 
 const itemsRouter = express.Router();

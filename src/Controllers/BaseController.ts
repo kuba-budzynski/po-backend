@@ -1,8 +1,13 @@
+// Abstract Controller, base for all other controllers.
+// Provide constant interface for request-response cycle
+
+// Each controller must provide execution() implementation, which is an actual Controller implementation
+// Controller is **safe** for parallel processing
+
 import * as express from 'express'
 import DailyLogger from '../logger';
 
 const logger = new DailyLogger("controllers");
-
 export default abstract class BaseController {
 
     protected abstract execution(req: express.Request, res: express.Response): Promise<void | any>;

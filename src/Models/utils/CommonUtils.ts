@@ -1,3 +1,5 @@
+// Common types used in models
+
 import { Schema } from 'mongoose';
 
 type Id = Schema.Types.ObjectId;

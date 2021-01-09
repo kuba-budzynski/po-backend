@@ -1,5 +1,7 @@
 require("dotenv").config({ silent: true });
 
+// Provide system variables for an app in a single object
+
 const settings = {
     currentEnv: process.env.NODE_ENV || "development",
     port: process.env.PORT || 7000,

@@ -1,5 +1,7 @@
 import Joi from 'joi';
 
+// In mongodb arrays are always optional, if so than empty
+
 export const SesjaJoi = Joi.object({
     administrator: Joi.string().length(24).required(),
     sedziaGlowny: Joi.string().length(24).optional(),

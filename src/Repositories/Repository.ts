@@ -1,3 +1,5 @@
+// Abstract definition for all Repositories
+
 import {Document, FilterQuery, UpdateQuery} from 'mongoose';
 
 export interface Write<T extends Document> {
