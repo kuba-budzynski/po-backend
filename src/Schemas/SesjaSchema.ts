@@ -7,11 +7,6 @@ const Sesja = new Schema({
         required: true,
         ref: 'Zadanie'
     }],
-    administrator: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "Administrator"
-    },
     sedziaGlowny: {
         type: Schema.Types.ObjectId,
         ref: 'SedziaGlowny'

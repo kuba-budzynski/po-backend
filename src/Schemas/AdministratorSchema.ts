@@ -3,19 +3,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const Administrator = new Schema({
-    sesje: [{
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Sesja'
-    }],
-    imie: {
-        type: String,
-        required: true
-    },
-    nazwisko: {
-        type: String,
-        required: true
-    },
     daneLogowania: {
         email: {
             type: String,
