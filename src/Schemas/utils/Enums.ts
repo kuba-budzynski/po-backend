@@ -8,8 +8,8 @@ const enums = {
         default: "oczekujaca"
     },
     rolaWSystemie: {
-        arr: ["gosc", "admin", "uzytkownik", "druzyna", "sedzia_glowny", "sedzia_zadania"],
-        default: "gosc"
+        arr: ["admin", "uzytkownik", "druzyna", "sedzia_glowny", "sedzia_zadania"],
+        default: "uzytkownik"
     },
     rodzajePlacowek: {
         arr: ["szkola_srednia", "szkola_wyzsza"],

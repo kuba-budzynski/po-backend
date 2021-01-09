@@ -1,10 +1,9 @@
-import { Document, Schema, model} from 'mongoose';
+import {Document, model} from 'mongoose';
 import Id, {Rejestracja} from './utils/CommonUtils';
 import SesjaSchema from '../Schemas/SesjaSchema'
 
 export interface ISesja {
     zadania: Id[],
-    administrator: Id,
     sedziaGlowny?: Id,
     start: Date,
     koniec: Date,
