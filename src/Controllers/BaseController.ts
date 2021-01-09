@@ -41,8 +41,8 @@ export default abstract class BaseController {
     }
 
     public clientError(res: express.Response, message?: string) {
-        logger.error("Unauthorized with 400 -> " + message)
-        return BaseController.jsonResponse(res, 400, message ? message : 'Unauthorized');
+        logger.error("Bad request with 400 -> " + message)
+        return BaseController.jsonResponse(res, 400, message ? message : 'Bad request');
     }
 
     public unauthorized(res: express.Response, message?: string) {

@@ -8,7 +8,6 @@ class Connection{
     constructor(){
         this.URI = `mongodb://${settings.db.username}:${settings.db.password}@${settings.db.ip}:${settings.db.port}`
              + "/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false";
-        mongoose.Promise = global.Promise;
         mongoose.set("useNewUrlParser", true);
         mongoose.set("useFindAndModify", false);
         mongoose.set("useCreateIndex", true);
