@@ -10,7 +10,7 @@ export interface ISedziaZadania {
     zadanie: Id
 }
 
-interface SedziaZadaniaModel extends ISedziaZadania, Document { }
+export interface SedziaZadaniaModel extends ISedziaZadania, Document { }
 
 const SedziaZadania = model<SedziaZadaniaModel>('SedziaZadania', SedziaZadaniaSchema, 'sedziowieZadan');
 export default SedziaZadania; 

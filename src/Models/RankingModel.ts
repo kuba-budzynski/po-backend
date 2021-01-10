@@ -7,7 +7,7 @@ export interface IRanking {
     druzyny: Id[]
 }
 
-interface RankingModel extends IRanking, Document { }
+export interface RankingModel extends IRanking, Document { }
 
 const Ranking = model<RankingModel>('Ranking', RankingSchema, 'rankingi');
 export default Ranking; 

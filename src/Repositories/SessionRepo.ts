@@ -1,8 +1,8 @@
-import {BaseRepository} from './Repository';
-import Sesja, {SesjaModel} from '../Models/SesjaModel';
+import { BaseRepository } from './BaseRepo';
+import Sesja, { SesjaModel } from '../Models/SesjaModel';
 import { UpdateQuery, _AllowStringsForIds, FilterQuery } from 'mongoose';
 
-export class SesjaRepo implements BaseRepository<SesjaModel>{
+export class SessionRepo implements BaseRepository<SesjaModel>{
 
     async create(item: SesjaModel): Promise<SesjaModel> {
         return Sesja.create(item);
@@ -19,7 +19,6 @@ export class SesjaRepo implements BaseRepository<SesjaModel>{
     async findOne(item: FilterQuery<SesjaModel>): Promise<SesjaModel> {
         return Sesja.findOne(item);
     }
-} 
+}
 
-const sesjaRepo = new SesjaRepo();
-export default sesjaRepo;
+export default new SessionRepo();

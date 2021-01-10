@@ -11,7 +11,7 @@ export interface IRozwiazanie {
     plikRozwiazania: PlikRozwiazania
 }
 
-interface RozwiazanieModel extends IRozwiazanie, Document { }
+export interface RozwiazanieModel extends IRozwiazanie, Document { }
 
 const Rozwiazanie = model<RozwiazanieModel>('Rozwiazanie', RozwiazanieSchema, 'rozwiazania');
 export default Rozwiazanie; 

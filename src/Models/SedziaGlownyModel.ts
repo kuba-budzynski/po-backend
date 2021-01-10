@@ -9,7 +9,7 @@ export interface ISedziaGlowny {
     sesja: Id
 }
 
-interface SedziaGlownyModel extends ISedziaGlowny, Document { }
+export interface SedziaGlownyModel extends ISedziaGlowny, Document { }
 
 const SedziaGlowny = model<SedziaGlownyModel>('SedziaGlowny', SedziaGlownySchema, 'sedziowieGlowni');
 export default SedziaGlowny; 

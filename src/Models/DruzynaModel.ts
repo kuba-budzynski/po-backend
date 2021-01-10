@@ -18,7 +18,7 @@ export interface IDruzyna {
     daneDoLogowania: DaneDoLogowania
 }
 
-interface DruzynaModel extends IDruzyna, Document { }
+export interface DruzynaModel extends IDruzyna, Document { }
 
 const Druzyna = model<DruzynaModel>('Druzyna', DruzynaSchema, 'druzyny');
 export default Druzyna;

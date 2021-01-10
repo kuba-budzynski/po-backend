@@ -11,7 +11,7 @@ export interface IWatek {
     odpowiedzi: Post[]
 }
 
-interface WatekModel extends IWatek, Document { }
+export interface WatekModel extends IWatek, Document { }
 
 const Watek = model<WatekModel>('Watek', WatekSchema, 'watki');
 export default Watek; 

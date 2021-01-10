@@ -10,7 +10,7 @@ export interface IZadanie {
     testy: Test[]
 }
 
-interface ZadanieModel extends IZadanie, Document { }
+export interface ZadanieModel extends IZadanie, Document { }
 
 const Zadanie = model<ZadanieModel>('Zadanie', ZadaniaSchema, 'zadania');
 export default Zadanie; 

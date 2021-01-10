@@ -6,7 +6,7 @@ export interface IAdministrator {
     daneDoLogowania: DaneDoLogowania
 }
 
-interface AdministratorModel extends IAdministrator, Document { }
+export interface AdministratorModel extends IAdministrator, Document { }
 
 const Administrator = model<AdministratorModel>('Administrator', AdministratorSchema, 'administratorzy');
 export default Administrator;
