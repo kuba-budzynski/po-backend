@@ -1,5 +1,14 @@
 const jwt = require("jsonwebtoken");
 
+import { Request } from "express"
+export interface AuthRequest extends Request {
+    user: {
+        email: String,
+        role: String,
+        sessionId?: String,
+    }
+}
+
 function authenticate(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader?.split(' ')[1]
