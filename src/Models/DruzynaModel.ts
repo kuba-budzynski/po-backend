@@ -15,7 +15,7 @@ export interface IDruzyna {
     nazwaPlacowki: String,
     placowka: String,
     uczestnicy: Uczestnik[],
-    daneDoLogowania: DaneDoLogowania
+    daneLogowania: DaneDoLogowania
 }
 
 export interface DruzynaModel extends IDruzyna, Document { }

@@ -13,7 +13,8 @@ const settings = {
     },
     server: {
         ip: "145.239.83.230"
-    }
+    },
+    authSecret: process.env.AUTH_SECRET || "",
 }
 
 export default settings;
