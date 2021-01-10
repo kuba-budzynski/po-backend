@@ -7,7 +7,7 @@ import ExerciseJudgeRepo, {ExerciseJudgeRepo as ExerciseJudgeRepoType} from "../
 type Repo = TeamRepoType | PrimaryJudgeRepoType | ExerciseJudgeRepoType | AdminRepoType
 
 class AuthService {
-    private async getLogin(repo: Repo, email: String, sessionId?: string) {
+    private async getLogin(repo: Repo, email: string, sessionId?: string) {
         const user = await repo.findOne({
             ...(sessionId && {"sesja._id": new ObjectID(sessionId)}),
             "daneLogowania.email": email
@@ -15,19 +15,19 @@ class AuthService {
         return user?.daneLogowania
     }
 
-    async getAdminLogin(email: String) {
+    async getAdminLogin(email: string) {
         return this.getLogin(AdminRepo, email)
     }
 
-    async getTeamLogin(email: String, sessionId: string) {
+    async getTeamLogin(email: string, sessionId: string) {
         return this.getLogin(TeamRepo, email, sessionId)
     }
 
-    async getPrimaryJudgeLogin(email: String, sessionId: string) {
+    async getPrimaryJudgeLogin(email: string, sessionId: string) {
         return this.getLogin(PrimaryJudgeRepo, email, sessionId)
     }
 
-    async getExerciseJudgeLogin(email: String, sessionId: string) {
+    async getExerciseJudgeLogin(email: string, sessionId: string) {
         return this.getLogin(ExerciseJudgeRepo, email, sessionId)
     }
 }

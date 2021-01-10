@@ -6,8 +6,8 @@ export interface IRozwiazanie {
     autor: Id,
     zadanie: Id,
     wyslano: Date,
-    status: String,
-    czasRozwiazania: Number,
+    status: string,
+    czasRozwiazania: number,
     plikRozwiazania: PlikRozwiazania
 }
 

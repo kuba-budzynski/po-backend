@@ -6,8 +6,8 @@ import { Request } from "express"
 import settings from "../settings";
 export interface AuthRequest extends Request {
     user: {
-        email: String,
-        role: String,
+        email: string,
+        role: string,
         sessionId?: Id,
     }
 }

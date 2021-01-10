@@ -3,7 +3,7 @@ import Id from './utils/CommonUtils';
 import RankingSchema from '../Schemas/RankingSchema'
 
 export interface IRanking {
-    czyZamrozony: Boolean,
+    czyZamrozony: boolean,
     druzyny: Id[]
 }
 

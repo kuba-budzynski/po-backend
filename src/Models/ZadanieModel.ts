@@ -4,9 +4,9 @@ import ZadaniaSchema from '../Schemas/ZadaniaSchema'
 
 export interface IZadanie {
     sedzia: Id,
-    tresc: String,
-    numer: Number,
-    nazwa: String,
+    tresc: string,
+    numer: number,
+    nazwa: string,
     testy: Test[]
 }
 

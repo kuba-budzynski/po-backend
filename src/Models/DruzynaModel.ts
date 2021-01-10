@@ -4,16 +4,16 @@ import DruzynaSchema from '../Schemas/DruzynaSchema'
 
 export interface IDruzyna {
     sesja: Id,
-    statusDruzyny: String,
+    statusDruzyny: string,
     rozwiazania: Id[],
     wynik: {
-        poprawne: Number,
-        czas: Number
+        poprawne: number,
+        czas: number
     },
-    powodDyskwalifikacji?: String,
-    nazwa: String,
-    nazwaPlacowki: String,
-    placowka: String,
+    powodDyskwalifikacji?: string,
+    nazwa: string,
+    nazwaPlacowki: string,
+    placowka: string,
     uczestnicy: Uczestnik[],
     daneLogowania: DaneDoLogowania
 }

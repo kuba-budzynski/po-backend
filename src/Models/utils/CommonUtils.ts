@@ -5,21 +5,21 @@ import { Schema } from 'mongoose';
 type Id = Schema.Types.ObjectId;
 
 export interface DaneDoLogowania {
-    email: String,
-    haslo: String,
-    rola: String,
+    email: string,
+    haslo: string,
+    rola: string,
 }
 
 export interface Uczestnik {
-    czyKapitan: Boolean,
-    imie: String,
-    nazwisko: String
+    czyKapitan: boolean,
+    imie: string,
+    nazwisko: string
 }
 
 export interface PlikRozwiazania {
-    nazwa: String,
-    rozmiar: Number,
-    kod: String
+    nazwa: string,
+    rozmiar: number,
+    kod: string
 }
 
 export interface Rejestracja {
@@ -30,15 +30,15 @@ export interface Rejestracja {
 
 export interface Post {
     autor: Id,
-    rola: String,
-    tresc: String,
+    rola: string,
+    tresc: string,
     wyslano: Date
 }
 
 export interface Test {
-    daneWejsciowe: String,
-    daneWyjsciowe: String,
-    limitCzasowy?: Number
+    daneWejsciowe: string,
+    daneWyjsciowe: string,
+    limitCzasowy?: number
 }
 
 export default Id;

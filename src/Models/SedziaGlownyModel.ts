@@ -3,8 +3,8 @@ import Id, {DaneDoLogowania} from './utils/CommonUtils';
 import SedziaGlownySchema from '../Schemas/SedziaGlownySchema'
 
 export interface ISedziaGlowny {
-    imie: String,
-    nazwisko: String,
+    imie: string,
+    nazwisko: string,
     daneLogowania: DaneDoLogowania
     sesja: Id
 }

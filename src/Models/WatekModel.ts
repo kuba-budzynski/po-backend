@@ -5,7 +5,7 @@ import WatekSchema from '../Schemas/WatekSchema'
 export interface IWatek {
     zadanie: Id,
     sesja: Id,
-    temat: String,
+    temat: string,
     zalozono: Date,
     pytania: Post[],
     odpowiedzi: Post[]
