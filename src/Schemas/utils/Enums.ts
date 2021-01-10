@@ -11,10 +11,16 @@ export const INSITUTION_TYPES = {
     UNIVERSITY: "szkola_wyzsza",
 }
 
+export const TEAM_STATUS = {
+    REGISTERED: "zarejestrowana",
+    REJECTED: "odrzucona",
+    QUALIFIED: "zakwalifikowana",
+    DISQUALIFIED: "zdyskwalifikowana",
+}
 const enums = {
     statusDruzyny: {
-        arr: ["oczekujaca", "zarejestrowana", "odrzucona", "zakwalifikowana", "zdyskwalifikowana"],
-        default: "oczekujaca"
+        arr: Object.values(TEAM_STATUS),
+        default: TEAM_STATUS.REGISTERED
     },
     statusRozwiazania: {
         arr: ["oczekujace", "poprawne", "blad_prezentacji", "blad_kompilacji", "blad_czasowy", "blad_wykonania"],
