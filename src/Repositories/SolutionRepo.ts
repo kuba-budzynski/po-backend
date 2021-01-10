@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import Rozwiazanie, {RozwiazanieModel} from '../Models/RozwiazanieModel';
+import Rozwiazanie, {IRozwiazanie} from '../Models/RozwiazanieModel';
 
-export class SolutionRepo extends BaseRepository<RozwiazanieModel> {
+export class SolutionRepo extends BaseRepository<IRozwiazanie> {
     constructor() {
         super(Rozwiazanie);
     }

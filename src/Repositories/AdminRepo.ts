@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import Administrator, {AdministratorModel} from '../Models/AdministratorModel';
+import Administrator, {IAdministrator} from '../Models/AdministratorModel';
 
-export class AdminRepo extends BaseRepository<AdministratorModel> {
+export class AdminRepo extends BaseRepository<IAdministrator> {
     constructor() {
         super(Administrator);
     }

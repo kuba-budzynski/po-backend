@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import {Document, model} from 'mongoose';
 import Id from './utils/CommonUtils';
 import RankingSchema from '../Schemas/RankingSchema'
 
@@ -7,7 +7,7 @@ export interface IRanking {
     druzyny: Id[]
 }
 
-export interface RankingModel extends IRanking, Document { }
+export type RankingModel = IRanking & Document
 
 const Ranking = model<RankingModel>('Ranking', RankingSchema, 'rankingi');
 export default Ranking; 

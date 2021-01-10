@@ -2,10 +2,12 @@
 
 import {Document, FilterQuery, Model, Query, UpdateQuery} from 'mongoose';
 
-export interface Write<T extends Document> {
-    create(item: T): Promise<T>;
-    update(id: string, item: UpdateQuery<T>): Query<T, T>;
-    delete(id: string): Query<T, T>;
+type Modeled<T> = T & Document
+
+export interface Write<T> {
+    create(item: T): Promise<Modeled<T>>;
+    update(id: string, item: UpdateQuery<Modeled<T>>): Query<Modeled<T>, Modeled<T>>;
+    delete(id: string): Query<Modeled<T>, Modeled<T>>;
 }
 
 export interface Read<T extends Document> {
@@ -13,29 +15,31 @@ export interface Read<T extends Document> {
     findOne(item: FilterQuery<T>): Query<T, T>;
 }
 
-export class BaseRepository<T extends Document> implements Write<T>, Read<T> {
-    model: Model<T>
-    constructor(model: Model<T>) {
+export class BaseRepository<T> implements Write<T>, Read<Modeled<T>> {
+    model: Model<Modeled<T>>
+    constructor(model: Model<Modeled<T>>) {
         this.model = model
     }
 
-    create(item: T): Promise<T> {
+    create(item: T): Promise<Modeled<T>> {
         return this.model.create(item)
     }
 
-    update(id: string, item: UpdateQuery<T>): Query<T, T> {
+    // @ts-ignore
+    // TODO: find out if false positive
+    update(id: string, item: UpdateQuery<Modeled<T>>): Query<Modeled<T>, Modeled<T>> {
         return this.model.findByIdAndUpdate(id, item)
     }
 
-    delete(id: string): Query<T, T> {
+    delete(id: string): Query<Modeled<T>, Modeled<T>> {
         return this.model.findByIdAndDelete(id)
     }
 
-    find(item: FilterQuery<T>): Query<T[], T> {
+    find(item: FilterQuery<Modeled<T>>): Query<Modeled<T>[], Modeled<T>> {
         return this.model.find(item)
     }
 
-    findOne(item: FilterQuery<T>): Query<T, T> {
+    findOne(item: FilterQuery<Modeled<T>>): Query<Modeled<T>, Modeled<T>> {
         return this.model.findOne(item)
     }
 

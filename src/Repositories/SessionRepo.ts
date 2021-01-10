@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import Sesja, {SesjaModel} from '../Models/SesjaModel';
+import Sesja, {ISesja} from '../Models/SesjaModel';
 
-export class SessionRepo extends BaseRepository<SesjaModel> {
+export class SessionRepo extends BaseRepository<ISesja> {
     constructor() {
         super(Sesja);
     }

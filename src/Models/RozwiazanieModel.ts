@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import {Document, model} from 'mongoose';
 import Id, {PlikRozwiazania} from './utils/CommonUtils';
 import RozwiazanieSchema from '../Schemas/RozwiazanieSchema'
 
@@ -11,7 +11,7 @@ export interface IRozwiazanie {
     plikRozwiazania: PlikRozwiazania
 }
 
-export interface RozwiazanieModel extends IRozwiazanie, Document { }
+export type RozwiazanieModel = IRozwiazanie & Document
 
 const Rozwiazanie = model<RozwiazanieModel>('Rozwiazanie', RozwiazanieSchema, 'rozwiazania');
 export default Rozwiazanie; 

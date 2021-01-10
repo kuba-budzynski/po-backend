@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import Ranking, {RankingModel} from '../Models/RankingModel';
+import Ranking, {IRanking} from '../Models/RankingModel';
 
-export class RankingRepo extends BaseRepository<RankingModel> {
+export class RankingRepo extends BaseRepository<IRanking> {
     constructor() {
         super(Ranking);
     }

@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import Zadanie, {ZadanieModel} from '../Models/ZadanieModel'
+import Zadanie, {IZadanie} from '../Models/ZadanieModel'
 
-export class ExerciseRepo extends BaseRepository<ZadanieModel> {
+export class ExerciseRepo extends BaseRepository<IZadanie> {
     constructor() {
         super(Zadanie);
     }

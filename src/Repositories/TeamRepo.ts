@@ -1,8 +1,7 @@
-import { BaseRepository } from './BaseRepo';
-import Druzyna, { DruzynaModel } from '../Models/DruzynaModel';
-import { UpdateQuery, _AllowStringsForIds, FilterQuery } from 'mongoose';
+import {BaseRepository} from './BaseRepo';
+import Druzyna, {IDruzyna} from '../Models/DruzynaModel';
 
-export class TeamRepo extends BaseRepository<DruzynaModel> {
+export class TeamRepo extends BaseRepository<IDruzyna> {
     constructor() {
         super(Druzyna);
     }

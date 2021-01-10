@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import {Document, model} from 'mongoose';
 import Id, {DaneDoLogowania} from './utils/CommonUtils';
 import SedziaGlownySchema from '../Schemas/SedziaGlownySchema'
 
@@ -9,7 +9,7 @@ export interface ISedziaGlowny {
     sesja: Id
 }
 
-export interface SedziaGlownyModel extends ISedziaGlowny, Document { }
+export type SedziaGlownyModel = ISedziaGlowny & Document
 
 const SedziaGlowny = model<SedziaGlownyModel>('SedziaGlowny', SedziaGlownySchema, 'sedziowieGlowni');
 export default SedziaGlowny; 

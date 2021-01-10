@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import {Document, model} from 'mongoose';
 import Id, {Test} from './utils/CommonUtils';
 import ZadaniaSchema from '../Schemas/ZadaniaSchema'
 
@@ -10,7 +10,7 @@ export interface IZadanie {
     testy: Test[]
 }
 
-export interface ZadanieModel extends IZadanie, Document { }
+export type ZadanieModel = IZadanie & Document
 
 const Zadanie = model<ZadanieModel>('Zadanie', ZadaniaSchema, 'zadania');
 export default Zadanie; 

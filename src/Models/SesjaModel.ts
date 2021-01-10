@@ -17,7 +17,7 @@ export interface ISesja {
     watki: Id[]
 }
 
-export interface SesjaModel extends ISesja, Document { }
+export type SesjaModel = ISesja & Document
 
 const Sesja = model<SesjaModel>('Sesja', SesjaSchema, 'sesje');
 export default Sesja;

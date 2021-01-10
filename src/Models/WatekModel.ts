@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import {Document, model} from 'mongoose';
 import Id, {Post} from './utils/CommonUtils';
 import WatekSchema from '../Schemas/WatekSchema'
 
@@ -11,7 +11,7 @@ export interface IWatek {
     odpowiedzi: Post[]
 }
 
-export interface WatekModel extends IWatek, Document { }
+export type WatekModel = IWatek & Document
 
 const Watek = model<WatekModel>('Watek', WatekSchema, 'watki');
 export default Watek; 

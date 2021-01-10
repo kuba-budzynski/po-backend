@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import SedziaGlowny, {SedziaGlownyModel} from '../Models/SedziaGlownyModel';
+import SedziaGlowny, {ISedziaGlowny} from '../Models/SedziaGlownyModel';
 
-export class PrimaryJudgeRepo extends BaseRepository<SedziaGlownyModel> {
+export class PrimaryJudgeRepo extends BaseRepository<ISedziaGlowny> {
     constructor() {
         super(SedziaGlowny);
     }

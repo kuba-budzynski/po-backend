@@ -1,7 +1,7 @@
 import {BaseRepository} from './BaseRepo';
-import Watek, {WatekModel} from '../Models/WatekModel';
+import Watek, {IWatek} from '../Models/WatekModel';
 
-export class ThreadRepo extends BaseRepository<WatekModel> {
+export class ThreadRepo extends BaseRepository<IWatek> {
     constructor() {
         super(Watek);
     }
