@@ -1,3 +1,11 @@
+export const SYSTEM_ROLES = {
+    ADMIN: "admin",
+    USER: "uzytkownik",
+    TEAM: "druzyna",
+    JUDGE_PRIMARY: "sedzia_glowny",
+    JUDGE_EXERCISE: "sedzia_zadania",
+}
+
 const enums = {
     statusDruzyny: {
         arr: ["oczekujaca", "zarejestrowana", "odrzucona", "zakwalifikowana", "zdyskwalifikowana"],
@@ -8,8 +16,8 @@ const enums = {
         default: "oczekujaca"
     },
     rolaWSystemie: {
-        arr: ["admin", "uzytkownik", "druzyna", "sedzia_glowny", "sedzia_zadania"],
-        default: "uzytkownik"
+        arr: Object.values(SYSTEM_ROLES),
+        default: SYSTEM_ROLES.USER
     },
     rodzajePlacowek: {
         arr: ["szkola_srednia", "szkola_wyzsza"],

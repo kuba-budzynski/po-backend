@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import Logger from './logger'
@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import './DB/database';
 import settings from './settings';
 import userRouter from './Routes/Sesja';
+import authRouter from "./Routes/Auth";
 
 const itemsRouter = express.Router();
 const logger = new Logger("routing");
@@ -23,10 +24,10 @@ app.get("/", (req, res) => {
 });
 
 app.use('/sesja', userRouter);
+app.use('/auth', authRouter);
 
 // --------------------------------------------------------------------------------------------
 
 app.listen(settings.port, () => {
     console.log(`Listening on port ${settings.port}`);
 })
-

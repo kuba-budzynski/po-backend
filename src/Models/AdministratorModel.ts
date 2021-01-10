@@ -3,7 +3,7 @@ import {DaneDoLogowania} from './utils/CommonUtils';
 import AdministratorSchema from '../Schemas/AdministratorSchema'
 
 export interface IAdministrator {
-    daneDoLogowania: DaneDoLogowania
+    daneLogowania: DaneDoLogowania
 }
 
 export interface AdministratorModel extends IAdministrator, Document { }

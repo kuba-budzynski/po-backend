@@ -2,7 +2,7 @@ import { BaseRepository } from './BaseRepo';
 import Watek, { WatekModel } from '../Models/WatekModel';
 import { UpdateQuery, _AllowStringsForIds, FilterQuery } from 'mongoose';
 
-export class TeamRepo implements BaseRepository<WatekModel>{
+export class ThreadRepo implements BaseRepository<WatekModel>{
 
     async create(item: WatekModel): Promise<WatekModel> {
         return Watek.create(item);
@@ -21,4 +21,4 @@ export class TeamRepo implements BaseRepository<WatekModel>{
     }
 }
 
-export default new TeamRepo();
+export default new ThreadRepo();

@@ -1,8 +1,8 @@
 import { BaseRepository } from './BaseRepo';
 import { UpdateQuery, _AllowStringsForIds, FilterQuery } from 'mongoose';
-import SedziaZadania, { SedziaZadaniaModel } from '../Models/SedziaZadaniaModel';
+import SedziaZadania, { SedziaZadaniaModel } from "../Models/SedziaZadaniaModel";
 
-export class PrimaryJudgeRepo implements BaseRepository<SedziaZadaniaModel>{
+export class ExerciseJudgeRepo implements BaseRepository<SedziaZadaniaModel>{
 
     async create(item: SedziaZadaniaModel): Promise<SedziaZadaniaModel> {
         return SedziaZadania.create(item);
@@ -21,4 +21,4 @@ export class PrimaryJudgeRepo implements BaseRepository<SedziaZadaniaModel>{
     }
 }
 
-export default new PrimaryJudgeRepo();
+export default new ExerciseJudgeRepo();
