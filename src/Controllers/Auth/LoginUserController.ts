@@ -1,14 +1,13 @@
 import express from 'express'
 import Joi from "joi"
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import BaseController from "../BaseController";
 import {AuthRequest} from "../../middlewares/authenticate";
 import {DaneDoLogowania} from "../../Models/utils/CommonUtils";
 import AuthService from "../../Services/AuthService";
 import {SYSTEM_ROLES} from "../../Schemas/utils/Enums";
 import settings from "../../settings";
-import bcrypt from "bcrypt";
-
-const jwt = require("jsonwebtoken")
 
 export class LoginUserController extends BaseController {
 
