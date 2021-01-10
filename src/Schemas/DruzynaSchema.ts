@@ -17,16 +17,19 @@ const Druzyna = new Schema({
     rozwiazania: [{
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'Rozwiazanie'
+        ref: 'Rozwiazanie',
+        default: [],
     }],
     wynik: {
         poprawne: {
             type: Number,
-            required: true
+            required: true,
+            default: 0,
         },
         czas: {
             type: Number,
-            required: true
+            required: true,
+            default: 0,
         }
     },
     powodDyskwalifikacji: {

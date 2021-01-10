@@ -6,6 +6,11 @@ export const SYSTEM_ROLES = {
     JUDGE_EXERCISE: "sedzia_zadania",
 }
 
+export const INSITUTION_TYPES = {
+    HIGH_SCOOL: "szkola_srednia",
+    UNIVERSITY: "szkola_wyzsza",
+}
+
 const enums = {
     statusDruzyny: {
         arr: ["oczekujaca", "zarejestrowana", "odrzucona", "zakwalifikowana", "zdyskwalifikowana"],
@@ -20,8 +25,8 @@ const enums = {
         default: SYSTEM_ROLES.USER
     },
     rodzajePlacowek: {
-        arr: ["szkola_srednia", "szkola_wyzsza"],
-        default: "szkola_wyzsza"
+        arr: Object.values(INSITUTION_TYPES),
+        default: INSITUTION_TYPES.UNIVERSITY
     }
 }
 

@@ -36,7 +36,7 @@ export interface Post {
 }
 
 export interface Test {
-    daneWeisciowe: String,
+    daneWejsciowe: String,
     daneWyjsciowe: String,
     limitCzasowy?: Number
 }
