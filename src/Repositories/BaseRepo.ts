@@ -30,4 +30,8 @@ export class BaseRepository<T> {
         return this.model.findOne(item)
     }
 
+    get(id: string) {
+        return this.model.findById(id)
+    }
+
 }

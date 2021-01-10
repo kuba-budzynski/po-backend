@@ -7,8 +7,9 @@ import './DB/database';
 import settings from './settings';
 import userRouter from './Routes/Sesja';
 import authRouter from "./Routes/Auth";
+import exerciseRouter from "./Routes/Zadania";
+import authenticate from "./middlewares/authenticate";
 
-const itemsRouter = express.Router();
 const logger = new Logger("routing");
 const app = express();
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 
 app.use('/sesja', userRouter);
 app.use('/auth', authRouter);
+app.use('/:sessionId/exercise', authenticate, exerciseRouter)
 
 // --------------------------------------------------------------------------------------------
 
