@@ -17,22 +17,32 @@ export const TEAM_STATUS = {
     QUALIFIED: "zakwalifikowana",
     DISQUALIFIED: "zdyskwalifikowana",
 }
+
+export const SOLUTION_STATUS = {
+    PENDING: "oczekujace",
+    CORRECT: "poprawne",
+    ERROR_PRESENTATION: "blad_prezentacji",
+    ERROR_COMPILATION: "blad_kompilacji",
+    ERROR_TIME: "blad_czasowy",
+    ERROR_EXECUTION: "blad_wykonania",
+}
+
 const enums = {
     statusDruzyny: {
         arr: Object.values(TEAM_STATUS),
-        default: TEAM_STATUS.REGISTERED
+        default: TEAM_STATUS.REGISTERED,
     },
     statusRozwiazania: {
-        arr: ["oczekujace", "poprawne", "blad_prezentacji", "blad_kompilacji", "blad_czasowy", "blad_wykonania"],
-        default: "oczekujaca"
+        arr: Object.values(SOLUTION_STATUS),
+        default: SOLUTION_STATUS.PENDING,
     },
     rolaWSystemie: {
         arr: Object.values(SYSTEM_ROLES),
-        default: SYSTEM_ROLES.USER
+        default: SYSTEM_ROLES.USER,
     },
     rodzajePlacowek: {
         arr: Object.values(INSITUTION_TYPES),
-        default: INSITUTION_TYPES.UNIVERSITY
+        default: INSITUTION_TYPES.UNIVERSITY,
     }
 }
 

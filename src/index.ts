@@ -5,9 +5,9 @@ import Logger from './logger'
 import bodyParser from "body-parser";
 import './DB/database';
 import settings from './settings';
-import userRouter from './Routes/Sesja';
+import userRouter from './Routes/Session';
 import authRouter from "./Routes/Auth";
-import exerciseRouter from "./Routes/Zadania";
+import exerciseRouter from "./Routes/Exercise";
 import authenticate from "./middlewares/authenticate";
 
 const logger = new Logger("routing");
@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 
 app.use('/sesja', userRouter);
 app.use('/auth', authRouter);
-app.use('/:sessionId/exercise', authenticate, exerciseRouter)
+app.use('/exercise', authenticate, exerciseRouter)
 
 // --------------------------------------------------------------------------------------------
 

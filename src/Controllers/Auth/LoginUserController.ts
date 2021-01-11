@@ -4,10 +4,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import BaseController from "../BaseController";
 import {AuthRequest} from "../../middlewares/authenticate";
-import {DaneDoLogowania} from "../../Models/utils/CommonUtils";
+import Id, {DaneDoLogowania} from "../../Models/utils/CommonUtils";
 import AuthService from "../../Services/AuthService";
 import {SYSTEM_ROLES} from "../../Schemas/utils/Enums";
 import settings from "../../settings";
+
+interface UserData {
+    id: Id,
+    daneLogowania: DaneDoLogowania,
+}
 
 export class LoginUserController extends BaseController {
 
@@ -29,7 +34,7 @@ export class LoginUserController extends BaseController {
             if (validate?.error)
                 return this.clientError(res, validate.error.message)
 
-            let user: DaneDoLogowania
+            let user: UserData
             let sessionId
 
             if (role === SYSTEM_ROLES.ADMIN) {
@@ -37,11 +42,11 @@ export class LoginUserController extends BaseController {
                 if (!user)
                     return this.clientError(res, "Błędny email lub hasło.")
 
-                const isPasswordValid = user.haslo === data.password
+                const isPasswordValid = user.daneLogowania.haslo === data.password
                 if (!isPasswordValid)
                     return this.clientError(res, "Błędny email lub hasło.")
             } else {
-                sessionId = req.params?.sessionId
+                sessionId = req.query?.sessionId
                 if (sessionId == null)
                     return this.clientError(res, "Parametr `sesja` jest wymagany w tym przypadku logowania.")
 
@@ -57,18 +62,16 @@ export class LoginUserController extends BaseController {
                     return this.clientError(res, "Parametr `rola` jest niepoprawny.")
 
                 user = await login(data.email, sessionId)
-                if (!user)
-                    return this.clientError(res, "Błędny email lub hasło.")
 
-                const isPasswordValid = await bcrypt.compare(user.haslo, data.password)
+
+                const isPasswordValid = await bcrypt.compare(user.daneLogowania.haslo, data.password)
                 if (!isPasswordValid)
                     return this.clientError(res, "Błędny email lub hasło.")
             }
 
-
             const token = jwt.sign({
-                email: user.email,
-                role: user.rola,
+                id: user.id,
+                role: user.daneLogowania.rola,
                 ...(sessionId && { sessionId }),
             }, settings.authSecret)
 

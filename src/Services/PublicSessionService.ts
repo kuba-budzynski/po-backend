@@ -26,13 +26,13 @@ class PublicSessionService {
 
     async signupPublicSession(sessionId: string, data: TeamSignupType) {
         const id = new ObjectID(sessionId)
-        const session = await SessionRepo.findOne({ _id: id })
+        const session = await SessionRepo.get(sessionId)
         if (!session)
             throw new Error("Nie znaleziono sesji o podanym id.")
 
         const { email, password, members, name, institutionName, institution } = data
-        const found = await TeamRepo.find({ "sesja._id": id, "daneLogowania.email": email })
-        if (found?.length)
+        const found = await TeamRepo.findOne({ "sesja._id": id, "daneLogowania.email": email })
+        if (!!found)
             throw new Error("Już istnieje konto o takim adresie e-mail.")
 
         const salt = await bcrypt.genSalt(10)

@@ -7,28 +7,34 @@ import ExerciseJudgeRepo, {ExerciseJudgeRepo as ExerciseJudgeRepoType} from "../
 type Repo = TeamRepoType | PrimaryJudgeRepoType | ExerciseJudgeRepoType | AdminRepoType
 
 class AuthService {
-    private async getLogin(repo: Repo, email: string, sessionId?: string) {
+    private static async getLogin(repo: Repo, email: string, sessionId?: string) {
         const user = await repo.findOne({
             ...(sessionId && {"sesja._id": new ObjectID(sessionId)}),
             "daneLogowania.email": email
         })
-        return user?.daneLogowania
+        if (!user)
+            throw new Error("Błędny email lub hasło.")
+
+        return {
+            daneLogowania: user.daneLogowania,
+            id: user.id,
+        }
     }
 
     async getAdminLogin(email: string) {
-        return this.getLogin(AdminRepo, email)
+        return AuthService.getLogin(AdminRepo, email)
     }
 
     async getTeamLogin(email: string, sessionId: string) {
-        return this.getLogin(TeamRepo, email, sessionId)
+        return AuthService.getLogin(TeamRepo, email, sessionId)
     }
 
     async getPrimaryJudgeLogin(email: string, sessionId: string) {
-        return this.getLogin(PrimaryJudgeRepo, email, sessionId)
+        return AuthService.getLogin(PrimaryJudgeRepo, email, sessionId)
     }
 
     async getExerciseJudgeLogin(email: string, sessionId: string) {
-        return this.getLogin(ExerciseJudgeRepo, email, sessionId)
+        return AuthService.getLogin(ExerciseJudgeRepo, email, sessionId)
     }
 }
 
