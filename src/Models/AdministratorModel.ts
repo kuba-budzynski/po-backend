@@ -1,12 +1,7 @@
-import {Document, model} from 'mongoose';
-import {DaneDoLogowania} from './utils/CommonUtils';
-import AdministratorSchema from '../Schemas/AdministratorSchema'
+import {prop} from "@typegoose/typegoose";
+import {DaneLogowania} from "./utils/CommonUtils";
 
-export interface IAdministrator {
-    daneLogowania: DaneDoLogowania
+export default class Administrator {
+    @prop({required: true})
+    public daneLogowania!: DaneLogowania;
 }
-
-export type AdministratorModel = IAdministrator & Document
-
-const Administrator = model<AdministratorModel>('Administrator', AdministratorSchema, 'administratorzy');
-export default Administrator;

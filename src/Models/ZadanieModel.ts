@@ -1,16 +1,31 @@
-import {Document, model} from 'mongoose';
-import Id, {Test} from './utils/CommonUtils';
-import ZadaniaSchema from '../Schemas/ZadaniaSchema'
+import {prop} from "@typegoose/typegoose";
+import SedziaZadania from "./SedziaZadaniaModel";
 
-export interface IZadanie {
-    sedzia: Id,
-    tresc: string,
-    numer: number,
-    nazwa: string,
-    testy: Test[]
+class Test {
+    @prop({required: true})
+    public daneWejsciowe!: string
+
+    @prop({required: true})
+    public daneWyjsciowe!: string
+
+    @prop({required: true})
+    public limitCzasowy!: number
+
 }
 
-export type ZadanieModel = IZadanie & Document
+export default class Zadanie {
+    @prop({ref: SedziaZadania})
+    public sedzia?: SedziaZadania
 
-const Zadanie = model<ZadanieModel>('Zadanie', ZadaniaSchema, 'zadania');
-export default Zadanie; 
+    @prop({required: true})
+    public tresc!: string
+
+    @prop({required: true})
+    public nazwa!: string
+
+    @prop({required: true})
+    public numer!: number
+
+    @prop({required: true, ref: Test, default: []})
+    public testy!: Test[]
+}

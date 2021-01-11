@@ -1,13 +1,10 @@
-import {Document, model} from 'mongoose';
-import Id from './utils/CommonUtils';
-import RankingSchema from '../Schemas/RankingSchema'
+import {prop} from "@typegoose/typegoose";
+import Druzyna from "./DruzynaModel";
 
-export interface IRanking {
-    czyZamrozony: boolean,
-    druzyny: Id[]
+export default class Ranking {
+    @prop({required: true, default: false})
+    public czyZamrozony!: boolean
+
+    @prop({required: true, ref: Druzyna, default: []})
+    public druzyny!: Druzyna[]
 }
-
-export type RankingModel = IRanking & Document
-
-const Ranking = model<RankingModel>('Ranking', RankingSchema, 'rankingi');
-export default Ranking; 

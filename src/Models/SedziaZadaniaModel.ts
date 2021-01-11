@@ -1,16 +1,21 @@
-import {Document, model} from 'mongoose';
-import Id, {DaneDoLogowania} from './utils/CommonUtils';
-import SedziaZadaniaSchema from '../Schemas/SedziaZadaniaSchema'
+import {prop, Ref} from "@typegoose/typegoose";
+import {DaneLogowania} from "./utils/CommonUtils";
+import Sesja from "./SesjaModel";
+import Zadanie from "./ZadanieModel";
 
-export interface ISedziaZadania {
-    imie: string,
-    nazwisko: string,
-    daneLogowania: DaneDoLogowania,
-    sesja: Id,
-    zadanie: Id
+export default class SedziaZadania {
+    @prop({required: true})
+    imie!: string
+
+    @prop({required: true})
+    nazwisko!: string
+
+    @prop({required: true})
+    public daneLogowania!: DaneLogowania
+
+    @prop({required: true, ref: Sesja})
+    public sesja!: Ref<Sesja>
+
+    @prop({required: true, ref: Zadanie})
+    public zadanie!: Ref<Zadanie>
 }
-
-export type SedziaZadaniaModel = ISedziaZadania & Document
-
-const SedziaZadania = model<SedziaZadaniaModel>('SedziaZadania', SedziaZadaniaSchema, 'sedziowieZadan');
-export default SedziaZadania; 
