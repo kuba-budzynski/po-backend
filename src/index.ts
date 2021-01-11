@@ -3,10 +3,10 @@ import cors from "cors";
 import helmet from "helmet";
 import Logger from './logger'
 import bodyParser from "body-parser";
-import './DB/database';
+import './Config/database';
 import settings from './settings';
-import userRouter from './Routes/Session';
-import exerciseRouter from "./Routes/Exercise";
+import configRoutes from "./Config/routes";
+import configSwagger from "./Config/swagger";
 
 const logger = new Logger("routing");
 const app = express();
@@ -22,8 +22,8 @@ app.get("/", (req, res) => {
     logger.info(`${req.method} ${req.path}`);
 });
 
-app.use('/sesja', userRouter);
-app.use('/exercise', exerciseRouter)
+configSwagger(app);
+configRoutes(app);
 
 // --------------------------------------------------------------------------------------------
 

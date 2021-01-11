@@ -1,6 +1,6 @@
 import Repository from "../Repositories/Repository";
 
-type GroupedDTO = {
+type GroupedSessionList = {
     [year: string]: {
         name: string,
         start: string,
@@ -8,27 +8,39 @@ type GroupedDTO = {
     }[]
 }
 
+export type GetSessionListDTO = {
+    year: string,
+    sessions: {
+        name: string,
+        start: string,
+        end: string,
+    }[]
+}[];
+
 export class SessionService {
-    async createSession(data) {
-        return Repository.SesjaRepo.create(data)
+    async create(data) {
+        return Repository.SessionRepo.create(data)
     }
-    async getSessionList() {
-        const sessions = await Repository.SesjaRepo.find().sort({ "start": -1 });
-        const grouped: GroupedDTO = sessions.reduce((dto, session) => {
+
+    async getGrouped(): Promise<GetSessionListDTO> {
+        const sessions = await Repository.SessionRepo.find().sort({"start": -1});
+        const grouped: GroupedSessionList = sessions.reduce((acc, session) => {
             const year = session.start.getFullYear().toString();
             return {
-                ...dto,
-                [year] : [
-                    ...(dto?.[year] ?? []),
+                ...acc,
+                [year]: [
+                    ...(acc?.[year] ?? []),
                     {
-                        name: session.nazwa,
+                        name: session.name,
                         start: session.start.toISOString(),
-                        end: session.koniec.toISOString(),
+                        end: session.end.toISOString(),
                     },
                 ],
             }
         }, {});
-        return Object.entries(grouped).sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
+        return Object.entries(grouped)
+            .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
+            .map(([year, sessions]) => ({year, sessions}))
     }
 }
 

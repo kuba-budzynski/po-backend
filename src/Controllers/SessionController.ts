@@ -1,10 +1,20 @@
-import * as express from 'express';
+import {Controller, Get, Route,} from "tsoa";
+import SessionService from "../Services/SessionService";
+
+@Route("session")
+export class SessionController extends Controller {
+    @Get()
+    public async getSessionList() {
+        return SessionService.getGrouped()
+    }
+}
+/*import * as express from 'express';
 import Joi from 'joi';
 
 import BaseController from '../BaseController';
 import SessionService from "../../Services/SessionService";
 export class CreateSessionController extends BaseController{
-    
+
     protected async execution(req: express.Request, res: express.Response): Promise<void | any>{
         try {
             const data = req.body;
@@ -12,7 +22,7 @@ export class CreateSessionController extends BaseController{
             console.log(par);
             const err = CreateSessionJoi.validate(data);
             if (err.error == undefined) {
-                const ret = await SessionService.createSession(data);
+                const ret = await SessionService.create(data);
                 return this.ok<any>(res, ret);
             }
             else {
@@ -26,23 +36,24 @@ export class CreateSessionController extends BaseController{
 }
 
 export const CreateSessionJoi = Joi.object({
-    sedziaGlowny: Joi.string().length(24).optional(),
+    primaryJudge: Joi.string().length(24).optional(),
     start: Joi.date().required().greater('now'),
-    koniec: Joi.date().required().greater(Joi.ref('start')),
-    nazwa: Joi.string().required(),
-    dozwoloneRozszerzenia: Joi.array().items(Joi.string()).required(),
-    rejestracja: Joi.object({
+    end: Joi.date().required().greater(Joi.ref('start')),
+    name: Joi.string().required(),
+    allowedExtensions: Joi.array().items(Joi.string()).required(),
+    registration: Joi.object({
         start: Joi.date().required().greater('now'),
-        koniec: Joi.date().greater(Joi.ref('start')).required(),
-        wyniki: Joi.date().greater(Joi.ref('koniec')).required()
+        end: Joi.date().greater(Joi.ref('start')).required(),
+        results: Joi.date().greater(Joi.ref('end')).required()
     }).required(),
-    opis: Joi.string().max(512).optional(),
+    description: Joi.string().max(512).optional(),
     ranking: Joi.string().length(24).required(),
     /////////////////////////////////////////////////////////////
-    watki: Joi.array().items(Joi.string().length(24)).optional(),
-    zadania: Joi.array().items(Joi.string().length(24)).optional(),
+    threads: Joi.array().items(Joi.string().length(24)).optional(),
+    exercises: Joi.array().items(Joi.string().length(24)).optional(),
     druzyny: Joi.array().items(Joi.string().length(24)).optional(),
     sedziowieZadan: Joi.array().items(Joi.string().length(24)).optional(),
 });
 
 export default new CreateSessionController();
+*/
