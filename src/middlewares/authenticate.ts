@@ -1,14 +1,13 @@
-import Id from "../Models/utils/CommonUtils";
-
-const jwt = require("jsonwebtoken");
-
-import { Request } from "express"
+import {Request} from "express"
 import settings from "../settings";
+import {mongoose} from "@typegoose/typegoose";
+import jwt from "jsonwebtoken";
+
 export interface AuthRequest extends Request {
     user: {
         email: string,
         role: string,
-        sessionId?: Id,
+        sessionId?: mongoose.Types.ObjectId,
     }
 }
 

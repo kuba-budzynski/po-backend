@@ -4,14 +4,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import BaseController from "../BaseController";
 import {AuthRequest} from "../../middlewares/authenticate";
-import Id, {DaneDoLogowania} from "../../Models/utils/CommonUtils";
 import AuthService from "../../Services/AuthService";
-import {SYSTEM_ROLES} from "../../Schemas/utils/Enums";
 import settings from "../../settings";
+import {UzytkownikRola} from "../../Models/DruzynaModel";
+import {mongoose} from "@typegoose/typegoose";
+import {DaneLogowania} from "../../Models/utils/CommonUtils";
 
 interface UserData {
-    id: Id,
-    daneLogowania: DaneDoLogowania,
+    id: mongoose.Types.ObjectId,
+    daneLogowania: DaneLogowania,
 }
 
 export class LoginUserController extends BaseController {
@@ -37,7 +38,7 @@ export class LoginUserController extends BaseController {
             let user: UserData
             let sessionId
 
-            if (role === SYSTEM_ROLES.ADMIN) {
+            if (role === UzytkownikRola.ADMIN) {
                 user = await AuthService.getAdminLogin(data.email)
                 if (!user)
                     return this.clientError(res, "Błędny email lub hasło.")
@@ -52,11 +53,11 @@ export class LoginUserController extends BaseController {
 
                 let login
 
-                if (role === SYSTEM_ROLES.TEAM)
+                if (role === UzytkownikRola.DRUZYNA)
                     login = AuthService.getTeamLogin
-                else if (role === SYSTEM_ROLES.JUDGE_PRIMARY)
+                else if (role === UzytkownikRola.SEDZIA_GLOWNY)
                     login = AuthService.getPrimaryJudgeLogin
-                else if (role === SYSTEM_ROLES.JUDGE_EXERCISE)
+                else if (role === UzytkownikRola.SEDZIA_ZADAINIA)
                     login = AuthService.getExerciseJudgeLogin
                 else
                     return this.clientError(res, "Parametr `rola` jest niepoprawny.")

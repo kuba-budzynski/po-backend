@@ -1,10 +1,8 @@
 import {ObjectID} from "mongodb";
 import bcrypt from "bcrypt";
-import {SYSTEM_ROLES, TEAM_STATUS} from "../Schemas/utils/Enums";
-import {Uczestnik} from "../Models/utils/CommonUtils";
 import Repository from "../Repositories/Repository";
 import {ReturnModelType} from "@typegoose/typegoose";
-import Druzyna from "../Models/DruzynaModel";
+import Druzyna, {StatusDruzyny, Uczestnik, UzytkownikRola} from "../Models/DruzynaModel";
 import Administrator from "../Models/AdministratorModel";
 import SedziaZadania from "../Models/SedziaZadaniaModel";
 import SedziaGlowny from "../Models/SedziaGlownyModel";
@@ -67,7 +65,7 @@ class AuthService {
 
         return await Repository.DruzynaRepo.create({
             rozwiazania: [],
-            statusDruzyny: TEAM_STATUS.REGISTERED,
+            statusDruzyny: StatusDruzyny.ZAREJESTROWANY,
             wynik: {czas: 0, poprawne: 0},
             sesja: session._id,
             nazwa: name,
@@ -77,7 +75,7 @@ class AuthService {
             daneLogowania: {
                 email,
                 haslo: newPassword,
-                rola: SYSTEM_ROLES.TEAM,
+                rola: UzytkownikRola.DRUZYNA,
             }
         })
     }

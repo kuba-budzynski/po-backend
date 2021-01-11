@@ -1,6 +1,6 @@
 import {prop, Ref} from "@typegoose/typegoose";
 import Sesja from "./SesjaModel";
-import DaneLogowania from "./utils/CommonUtils";
+import {DaneLogowania} from "./utils/CommonUtils";
 import Rozwiazanie from "./RozwiazanieModel";
 
 export enum UzytkownikRola {
@@ -32,7 +32,7 @@ class Wynik {
     czas!: number;
 }
 
-class Uczestnik {
+export class Uczestnik {
     @prop({required: true})
     public imie!: string
 
