@@ -6,8 +6,12 @@ import Rozwiazanie from "../Models/RozwiazanieModel";
 import SedziaGlowny from "../Models/SedziaGlownyModel";
 import SedziaZadania from "../Models/SedziaZadaniaModel";
 import Watek from "../Models/WatekModel";
+import Administrator from "../Models/AdministratorModel";
+import Ranking from "../Models/RankingModel";
 
 class RepositoryClass {
+    AdministratorRepo = getModelForClass(Administrator);
+    RankingRepo = getModelForClass(Ranking);
     SesjaRepo = getModelForClass(Sesja);
     DruzynaRepo = getModelForClass(Druzyna);
     ZadanieRepo = getModelForClass(Zadanie);

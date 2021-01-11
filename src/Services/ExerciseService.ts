@@ -1,4 +1,4 @@
-import ExerciseRepo from "../Repositories/ExerciseRepo";
+import Repository from "../Repositories/Repository";
 
 type GetExerciseDTO = {
     name: string,
@@ -8,7 +8,7 @@ type GetExerciseDTO = {
 
 export class ExerciseService {
     async getExercise(exerciseId: string) {
-        const exercise = await ExerciseRepo.get(exerciseId)
+        const exercise = await Repository.ZadanieRepo.get(exerciseId)
         if (!exercise)
             throw new Error("Zadanie o takim id nie istnieje.")
 

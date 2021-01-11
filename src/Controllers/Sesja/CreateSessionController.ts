@@ -2,7 +2,7 @@ import * as express from 'express';
 import Joi from 'joi';
 
 import BaseController from '../BaseController';
-import sesjaRepo from '../../Repositories/ExerciseRepo'
+import SessionService from "../../Services/SessionService";
 export class CreateSessionController extends BaseController{
     
     protected async execution(req: express.Request, res: express.Response): Promise<void | any>{
@@ -12,18 +12,18 @@ export class CreateSessionController extends BaseController{
             console.log(par);
             const err = CreateSessionJoi.validate(data);
             if (err.error == undefined) {
-                const ret = await sesjaRepo.create(data);
+                const ret = await SessionService.createSession(data);
                 return this.ok<any>(res, ret);
             }
             else {
                 this.clientError(res, err.error.message)
-            };
+            }
         }
         catch (err) {
             this.fail(res, err);
         }
     }
-};
+}
 
 export const CreateSessionJoi = Joi.object({
     sedziaGlowny: Joi.string().length(24).optional(),
