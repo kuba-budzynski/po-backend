@@ -12,7 +12,7 @@ export enum SolutionStatus {
     ERROR_EXECUTION = "blad_wykonania",
 }
 
-class SolutionFile {
+export class SolutionFile {
     @prop({required: true})
     public name!: string
 
@@ -27,20 +27,20 @@ class SolutionFile {
 
 export default class Solution {
     @prop({ required: true, ref: `Team` })
-    public autor!: Ref<Team>
+    public author!: Ref<Team>
 
     @prop({ required: true, ref: `Exercise` })
     public exercise!: Ref<Exercise>
 
-    @prop({required: true})
+    @prop({required: true, default: new Date()})
     public sent!: Date
 
     @prop({required: true, enum: SolutionStatus, default: SolutionStatus.PENDING})
     public status!: SolutionStatus;
 
     @prop()
-    public solutionTime: number
+    public solutionTime?: number
 
     @prop({required: true})
-    solutionFile!: SolutionFile
+    public solutionFile!: SolutionFile
 }

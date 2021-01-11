@@ -17,12 +17,12 @@ export type GetSessionListDTO = {
     }[]
 }[];
 
-export class SessionService {
+class SessionService {
     async create(data) {
         return Repository.SessionRepo.create(data)
     }
 
-    async getGrouped(): Promise<GetSessionListDTO> {
+    async getGrouped() {
         const sessions = await Repository.SessionRepo.find().sort({"start": -1});
         const grouped: GroupedSessionList = sessions.reduce((acc, session) => {
             const year = session.start.getFullYear().toString();
@@ -38,9 +38,11 @@ export class SessionService {
                 ],
             }
         }, {});
-        return Object.entries(grouped)
+        const dto: GetSessionListDTO = Object.entries(grouped)
             .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
             .map(([year, sessions]) => ({year, sessions}))
+
+        return dto
     }
 }
 

@@ -6,7 +6,7 @@ export type GetExerciseDTO = {
     content: string,
 }
 
-export class ExerciseService {
+class ExerciseService {
     async getExercise(exerciseId: string) {
         const exercise = await Repository.ExerciseRepo.findById(exerciseId)
         if (!exercise)
