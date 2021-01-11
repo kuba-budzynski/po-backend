@@ -1,15 +1,16 @@
-import {Document, model} from 'mongoose';
-import Id, {DaneDoLogowania} from './utils/CommonUtils';
-import SedziaGlownySchema from '../Schemas/SedziaGlownySchema'
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
+import {User} from "./utils/CommonUtils";
+import Sesja from "./SesjaModel";
 
-export interface ISedziaGlowny {
-    imie: string,
-    nazwisko: string,
-    daneLogowania: DaneDoLogowania
-    sesja: Id
+@modelOptions({ schemaOptions: { collection: 'sedziowie_glowni' } })
+export default class SedziaGlowny extends User {
+    @prop({required: true, ref: `Sesja`})
+    public sesja!: Ref<Sesja>
+
+    @prop({required: true})
+    imie!: string
+
+    @prop({required: true})
+    nazwisko!: string
+
 }
-
-export type SedziaGlownyModel = ISedziaGlowny & Document
-
-const SedziaGlowny = model<SedziaGlownyModel>('SedziaGlowny', SedziaGlownySchema, 'sedziowieGlowni');
-export default SedziaGlowny; 

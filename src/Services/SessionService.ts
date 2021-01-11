@@ -1,4 +1,4 @@
-import SessionRepo from "../Repositories/SessionRepo";
+import Repository from "../Repositories/Repository";
 
 type GroupedDTO = {
     [year: string]: {
@@ -9,8 +9,11 @@ type GroupedDTO = {
 }
 
 export class SessionService {
+    async createSession(data) {
+        return Repository.SesjaRepo.create(data)
+    }
     async getSessionList() {
-        const sessions = await SessionRepo.find().sort({ "start": -1 });
+        const sessions = await Repository.SesjaRepo.find().sort({ "start": -1 });
         const grouped: GroupedDTO = sessions.reduce((dto, session) => {
             const year = session.start.getFullYear().toString();
             return {

@@ -1,23 +1,56 @@
-import {Document, model} from 'mongoose';
-import Id, {Rejestracja} from './utils/CommonUtils';
-import SesjaSchema from '../Schemas/SesjaSchema'
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
+import Druzyna from "./DruzynaModel";
+import Zadanie from "./ZadanieModel";
+import SedziaGlowny from "./SedziaGlownyModel";
+import SedziaZadania from "./SedziaZadaniaModel";
+import Watek from "./WatekModel";
 
-export interface ISesja {
-    zadania: Id[],
-    sedziaGlowny?: Id,
-    start: Date,
-    koniec: Date,
-    nazwa: string,
-    opis?: string,
-    dozwoloneRozszerzenia: string[],
-    druzyny: Id[],
-    sedziowieZadan: Id[],
-    rejestracja: Rejestracja,
-    ranking: Id,
-    watki: Id[]
+export class Rejestracja {
+    @prop()
+    public start: Date
+
+    @prop()
+    public koniec: Date
+
+    @prop()
+    public wyniki: Date
 }
 
-export type SesjaModel = ISesja & Document
+@modelOptions({ schemaOptions: { collection: 'sesje' } })
+export default class Sesja {
+    @prop({required: true})
+    public nazwa!: string
 
-const Sesja = model<SesjaModel>('Sesja', SesjaSchema, 'sesje');
-export default Sesja;
+    @prop({default: ""})
+    public opis!: string
+
+    @prop({default: [], type: [String] })
+    public dozwoloneRozszerzenia!: string[]
+
+    @prop({required: true})
+    public start!: Date
+
+    @prop({required: true})
+    public koniec!: Date
+
+    @prop({required: true, ref: `Druzyna`, default: []})
+    public druzyny!: Ref<Druzyna>[]
+
+    @prop({required: true, ref: `Zadanie`, default: []})
+    public zadania!: Ref<Zadanie>[]
+
+    @prop({required: true, ref: `Watek`, default: []})
+    public watki!: Ref<Watek>[]
+
+    @prop({ref: `SedziaGlowny`})
+    public sedziaGlowny: Ref<SedziaGlowny>
+
+    @prop({ref: `SedziaZadania`, default: []})
+    public sedziowieZadan: Ref<SedziaZadania>[]
+
+    @prop({default: Rejestracja})
+    public rejestracja!: Rejestracja
+
+    @prop({default: false})
+    public czyRankingZamrozony: boolean
+}

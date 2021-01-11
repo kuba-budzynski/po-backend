@@ -1,44 +1,20 @@
 // Common types used in models
 
-import { Schema } from 'mongoose';
+import {prop} from "@typegoose/typegoose";
+import {UzytkownikRola} from "../DruzynaModel";
 
-type Id = Schema.Types.ObjectId;
+export class DaneLogowania {
+    @prop({required: true})
+    public email!: string
 
-export interface DaneDoLogowania {
-    email: string,
-    haslo: string,
-    rola: string,
+    @prop({required: true})
+    public haslo!: string
+
+    @prop({required: true, enum: UzytkownikRola})
+    public rola!: UzytkownikRola
 }
 
-export interface Uczestnik {
-    czyKapitan: boolean,
-    imie: string,
-    nazwisko: string
+export class User {
+    @prop({required: true, default: DaneLogowania})
+    public daneLogowania!: DaneLogowania
 }
-
-export interface PlikRozwiazania {
-    nazwa: string,
-    rozmiar: number,
-    kod: string
-}
-
-export interface Rejestracja {
-    start: Date,
-    koniec: Date,
-    wyniki: Date
-}
-
-export interface Post {
-    autor: Id,
-    rola: string,
-    tresc: string,
-    wyslano: Date
-}
-
-export interface Test {
-    daneWejsciowe: string,
-    daneWyjsciowe: string,
-    limitCzasowy?: number
-}
-
-export default Id;
