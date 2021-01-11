@@ -20,7 +20,7 @@ export class SolutionFile {
     public size!: number
 
     @prop({required: true})
-    public code!: string
+    public code!: Buffer
 }
 
 

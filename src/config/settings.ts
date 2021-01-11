@@ -9,7 +9,7 @@ const settings = {
         port: process.env.MONGODB_PORT || 27017,
         ip: process.env.MONGODB_IP || "localhost",
         username: process.env.MONGODB_USERNAME || "",
-        password: process.env.MONGODB_PASSWORD || ""
+        password: process.env.MONGODB_PASSWORD || "",
     },
     server: {
         ip: "145.239.83.230"

@@ -1,10 +1,53 @@
 {
   "entryFile": "src/index.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/Controllers/*Controller.ts"],
+  "controllerPathGlobs": [
+    "src/Controllers/*Controller.ts"
+  ],
   "spec": {
     "outputDirectory": "src/_generated",
-    "specVersion": 3
+    "specVersion": 3,
+    "specMerging": "recursive",
+    "spec": {
+      "paths": {
+        "/team-panel/{exerciseId}/solution": {
+          "post": {
+            "consumes": [
+              "multipart/form-data"
+            ],
+            "parameters": [
+              {
+                "in": "query",
+                "name": "teamId",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "in": "path",
+                "name": "exerciseId",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "requestBody": {
+              "content": {
+                "multipart/form-data": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "solutionFile": {
+                        "format": "binary",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "routes": {
     "routesDir": "src/_generated"

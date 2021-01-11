@@ -1,7 +1,6 @@
-import {Body, Controller, Get, Path, Post, Query, Route} from "tsoa";
+import {Controller, Get, Path, Post, Query, Request, Route} from "tsoa";
 import TeamPanelService from "../Services/TeamPanelService";
-import Joi from "joi";
-import {SolutionFile} from "../Models/Solution";
+import express from "express";
 
 @Route("team-panel")
 export class TeamPanelController extends Controller {
@@ -17,18 +16,8 @@ export class TeamPanelController extends Controller {
     public async createSolution(
         @Query() teamId: string, // instead of receiving one from jwt
         @Path() exerciseId: string,
-        @Body() data: SolutionFile,
+        @Request() request: express.Request,
     ): Promise<any> {
-        if (!CreateSolutionJoi.validate(data))
-            throw Error("Incorrect data")
-
-        return TeamPanelService.createSolution(teamId, exerciseId, data);
+        return TeamPanelService.createSolution(teamId, exerciseId, request);
     }
 }
-
-// add real file upload implementation
-const CreateSolutionJoi = Joi.object({
-    name: Joi.string().required(),
-    size: Joi.number().max(5000000).required(),
-    code: Joi.string().required(),
-});
