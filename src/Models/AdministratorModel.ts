@@ -1,7 +1,5 @@
-import {prop} from "@typegoose/typegoose";
-import {DaneLogowania} from "./utils/CommonUtils";
+import {User} from "./utils/CommonUtils";
+import {modelOptions} from "@typegoose/typegoose";
 
-export default class Administrator {
-    @prop({required: true})
-    public daneLogowania!: DaneLogowania;
-}
+@modelOptions({ schemaOptions: { collection: 'administratorzy' } })
+export default class Administrator extends User { }

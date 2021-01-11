@@ -1,6 +1,6 @@
-import {prop, Ref} from "@typegoose/typegoose";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
 import Sesja from "./SesjaModel";
-import {DaneLogowania} from "./utils/CommonUtils";
+import {User} from "./utils/CommonUtils";
 import Rozwiazanie from "./RozwiazanieModel";
 
 export enum UzytkownikRola {
@@ -43,7 +43,8 @@ export class Uczestnik {
     public czyKapitan!: boolean
 }
 
-export default class Druzyna {
+@modelOptions({ schemaOptions: { collection: 'druzyny' } })
+export default class Druzyna extends User {
     @prop({required: true})
     public nazwa!: string
 
@@ -54,23 +55,20 @@ export default class Druzyna {
     public placowka!: TypPlacowki;
 
     @prop({
-        required: true, validate: {
+        required: true, type: [Uczestnik], validate: {
             validator: (members) => members.length >= 2 && members.length <= 3,
             message: 'Niepoprawna ilość uczestników. Może być 2-3 uczestników.'
         }
     })
     public uczestnicy!: Uczestnik[];
 
-    @prop({ required: true })
-    public daneLogowania!: DaneLogowania;
-
-    @prop({ required: true, ref: Sesja })
+    @prop({ required: true, ref: `Sesja` })
     public sesja!: Ref<Sesja>
 
     @prop({required: true, enum: StatusDruzyny, default: StatusDruzyny.ZAREJESTROWANY})
     public status!: StatusDruzyny;
 
-    @prop({ required: true, ref: Rozwiazanie, default: [] })
+    @prop({ required: true, ref: `Rozwiazanie`, default: [] })
     public rozwiazania!: Ref<Rozwiazanie>[]
 
     @prop({required: true, default: Wynik})

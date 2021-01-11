@@ -1,4 +1,4 @@
-import {prop, Ref} from "@typegoose/typegoose";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
 import Zadanie from "./ZadanieModel";
 import Sesja from "./SesjaModel";
 import Druzyna from "./DruzynaModel";
@@ -13,20 +13,21 @@ abstract class Post {
 }
 
 class Pytanie extends Post {
-    @prop({required: true, ref: Druzyna})
-    public autor!: Druzyna
+    @prop({required: true, ref: `Druzyna`})
+    public autor!: Ref<Druzyna>
 }
 
 class Odpowiedz extends Post {
-    @prop({required: true, ref: SedziaZadania})
-    public autor!: SedziaZadania
+    @prop({required: true, ref: `SedziaZadania`})
+    public autor!: Ref<SedziaZadania>
 }
 
+@modelOptions({ schemaOptions: { collection: 'watki' } })
 export default class Watek {
-    @prop({required: true, ref: Zadanie})
+    @prop({required: true, ref: `Zadanie`})
     public zadanie!: Ref<Zadanie>
 
-    @prop({required: true, ref: Sesja})
+    @prop({required: true, ref: `Sesja`})
     public sesja!: Ref<Sesja>
 
     @prop({required: true})
@@ -35,10 +36,10 @@ export default class Watek {
     @prop({required: true})
     public zalozono!: Date
 
-    @prop({ref: Pytanie, required: true, default: []})
+    @prop({required: true, default: [], type: [Pytanie]})
     pytania: Pytanie[]
 
-    @prop({ref: Odpowiedz, required: true, default: []})
+    @prop({required: true, default: [], type: [Odpowiedz]})
     odpowiedzi: Odpowiedz[]
 }
 

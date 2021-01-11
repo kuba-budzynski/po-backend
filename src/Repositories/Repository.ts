@@ -7,11 +7,9 @@ import SedziaGlowny from "../Models/SedziaGlownyModel";
 import SedziaZadania from "../Models/SedziaZadaniaModel";
 import Watek from "../Models/WatekModel";
 import Administrator from "../Models/AdministratorModel";
-import Ranking from "../Models/RankingModel";
 
 class RepositoryClass {
     AdministratorRepo =     getRepository(Administrator);
-    RankingRepo =           getRepository(Ranking);
     SesjaRepo =             getRepository(Sesja);
     DruzynaRepo =           getRepository(Druzyna);
     ZadanieRepo =           getRepository(Zadanie);

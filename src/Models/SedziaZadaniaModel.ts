@@ -1,21 +1,19 @@
-import {prop, Ref} from "@typegoose/typegoose";
-import {DaneLogowania} from "./utils/CommonUtils";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
+import {User} from "./utils/CommonUtils";
 import Sesja from "./SesjaModel";
 import Zadanie from "./ZadanieModel";
 
-export default class SedziaZadania {
+@modelOptions({ schemaOptions: { collection: 'sedziowie_zadan' } })
+export default class SedziaZadania extends User {
     @prop({required: true})
-    imie!: string
+    public imie!: string
 
     @prop({required: true})
-    nazwisko!: string
+    public nazwisko!: string
 
-    @prop({required: true})
-    public daneLogowania!: DaneLogowania
-
-    @prop({required: true, ref: Sesja})
+    @prop({required: true, ref: `Sesja`})
     public sesja!: Ref<Sesja>
 
-    @prop({required: true, ref: Zadanie})
+    @prop({required: true, ref: `Zadanie`})
     public zadanie!: Ref<Zadanie>
 }

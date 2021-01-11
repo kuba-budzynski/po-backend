@@ -1,13 +1,11 @@
-import {prop, Ref} from "@typegoose/typegoose";
-import {DaneLogowania} from "./utils/CommonUtils";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
+import {User} from "./utils/CommonUtils";
 import Sesja from "./SesjaModel";
 
-export default class SedziaGlowny {
-    @prop({required: true, ref: Sesja})
+@modelOptions({ schemaOptions: { collection: 'sedziowie_glowni' } })
+export default class SedziaGlowny extends User {
+    @prop({required: true, ref: `Sesja`})
     public sesja!: Ref<Sesja>
-
-    @prop({required: true})
-    public daneLogowania!: DaneLogowania;
 
     @prop({required: true})
     imie!: string

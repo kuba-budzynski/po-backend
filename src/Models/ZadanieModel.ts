@@ -1,4 +1,4 @@
-import {prop} from "@typegoose/typegoose";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
 import SedziaZadania from "./SedziaZadaniaModel";
 
 class Test {
@@ -13,9 +13,10 @@ class Test {
 
 }
 
+@modelOptions({ schemaOptions: { collection: 'zadania' } })
 export default class Zadanie {
-    @prop({ref: SedziaZadania})
-    public sedzia?: SedziaZadania
+    @prop({ref: `SedziaZadania`})
+    public sedzia?: Ref<SedziaZadania>
 
     @prop({required: true})
     public tresc!: string
@@ -26,6 +27,6 @@ export default class Zadanie {
     @prop({required: true})
     public numer!: number
 
-    @prop({required: true, ref: Test, default: []})
+    @prop({required: true, default: [], type: [Test]})
     public testy!: Test[]
 }

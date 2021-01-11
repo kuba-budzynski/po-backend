@@ -13,3 +13,8 @@ export class DaneLogowania {
     @prop({required: true, enum: UzytkownikRola})
     public rola!: UzytkownikRola
 }
+
+export class User {
+    @prop({required: true, default: DaneLogowania})
+    public daneLogowania!: DaneLogowania
+}

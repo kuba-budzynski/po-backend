@@ -1,10 +1,9 @@
-import {prop} from "@typegoose/typegoose";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
 import Druzyna from "./DruzynaModel";
 import Zadanie from "./ZadanieModel";
 import SedziaGlowny from "./SedziaGlownyModel";
 import SedziaZadania from "./SedziaZadaniaModel";
 import Watek from "./WatekModel";
-import Ranking from "./RankingModel";
 
 export class Rejestracja {
     @prop()
@@ -17,14 +16,15 @@ export class Rejestracja {
     public wyniki: Date
 }
 
+@modelOptions({ schemaOptions: { collection: 'sesje' } })
 export default class Sesja {
     @prop({required: true})
-    public name!: string
+    public nazwa!: string
 
-    @prop({required: true, default: ""})
-    public description!: string
+    @prop({default: ""})
+    public opis!: string
 
-    @prop({required: true, default: []})
+    @prop({default: [], type: [String] })
     public dozwoloneRozszerzenia!: string[]
 
     @prop({required: true})
@@ -33,24 +33,24 @@ export default class Sesja {
     @prop({required: true})
     public koniec!: Date
 
-    @prop({required: true, ref: Druzyna, default: []})
-    public druzyny!: Druzyna[]
+    @prop({required: true, ref: `Druzyna`, default: []})
+    public druzyny!: Ref<Druzyna>[]
 
-    @prop({required: true, ref: Zadanie, default: []})
-    public zadania!: Zadanie[]
+    @prop({required: true, ref: `Zadanie`, default: []})
+    public zadania!: Ref<Zadanie>[]
 
-    @prop({required: true, ref: Watek, default: []})
-    public watki!: Watek[]
+    @prop({required: true, ref: `Watek`, default: []})
+    public watki!: Ref<Watek>[]
 
-    @prop({ref: SedziaGlowny})
-    public sedziaGlowny: SedziaGlowny
+    @prop({ref: `SedziaGlowny`})
+    public sedziaGlowny: Ref<SedziaGlowny>
 
-    @prop({ref: SedziaZadania, required: true, default: []})
-    public sedziowieZadan: SedziaZadania[]
+    @prop({ref: `SedziaZadania`, default: []})
+    public sedziowieZadan: Ref<SedziaZadania>[]
 
-    @prop({required: true, default: Rejestracja})
-    public rejestracja!: Rejestracja;
+    @prop({default: Rejestracja})
+    public rejestracja!: Rejestracja
 
-    @prop({ref: Ranking, required: true, default: Ranking})
-    public ranking!: Ranking
+    @prop({default: false})
+    public czyRankingZamrozony: boolean
 }

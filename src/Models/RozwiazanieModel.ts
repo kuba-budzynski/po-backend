@@ -1,5 +1,5 @@
 import Druzyna from "./DruzynaModel";
-import {prop} from "@typegoose/typegoose";
+import {modelOptions, prop, Ref} from "@typegoose/typegoose";
 import Zadanie from "./ZadanieModel";
 
 
@@ -24,12 +24,13 @@ class PlikRozwiazania {
 }
 
 
+@modelOptions({ schemaOptions: { collection: 'rozwiazania' } })
 export default class Rozwiazanie {
-    @prop({ required: true, ref: Druzyna })
-    public autor!: Druzyna
+    @prop({ required: true, ref: `Druzyna` })
+    public autor!: Ref<Druzyna>
 
-    @prop({ required: true, ref: Zadanie })
-    public zadanie!: Zadanie
+    @prop({ required: true, ref: `Zadanie` })
+    public zadanie!: Ref<Zadanie>
 
     @prop({required: true})
     public wyslano!: Date
