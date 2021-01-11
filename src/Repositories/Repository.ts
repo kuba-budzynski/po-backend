@@ -1,4 +1,4 @@
-import {getModelForClass} from "@typegoose/typegoose";
+import {getModelForClass as getRepository} from "@typegoose/typegoose";
 import Druzyna from "../Models/DruzynaModel";
 import Sesja from "../Models/SesjaModel";
 import Zadanie from "../Models/ZadanieModel";
@@ -10,15 +10,15 @@ import Administrator from "../Models/AdministratorModel";
 import Ranking from "../Models/RankingModel";
 
 class RepositoryClass {
-    AdministratorRepo = getModelForClass(Administrator);
-    RankingRepo = getModelForClass(Ranking);
-    SesjaRepo = getModelForClass(Sesja);
-    DruzynaRepo = getModelForClass(Druzyna);
-    ZadanieRepo = getModelForClass(Zadanie);
-    RozwiazanieRepo = getModelForClass(Rozwiazanie);
-    SedziaGlownyRepo = getModelForClass(SedziaGlowny);
-    SedziaZadaniaRepo = getModelForClass(SedziaZadania);
-    WatekRepo = getModelForClass(Watek);
+    AdministratorRepo =     getRepository(Administrator);
+    RankingRepo =           getRepository(Ranking);
+    SesjaRepo =             getRepository(Sesja);
+    DruzynaRepo =           getRepository(Druzyna);
+    ZadanieRepo =           getRepository(Zadanie);
+    RozwiazanieRepo =       getRepository(Rozwiazanie);
+    SedziaGlownyRepo =      getRepository(SedziaGlowny);
+    SedziaZadaniaRepo =     getRepository(SedziaZadania);
+    WatekRepo =             getRepository(Watek);
 }
 
 const Repository = new RepositoryClass()
