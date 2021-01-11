@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import Logger from './logger'
+import Logger from './config/logger'
 import bodyParser from "body-parser";
-import './Config/database';
-import settings from './settings';
-import configRoutes from "./Config/routes";
-import configSwagger from "./Config/swagger";
+import './config/database';
+import settings from './config/settings';
+import configRoutes from "./config/routes";
+import configSwagger from "./config/swagger";
 
 const logger = new Logger("routing");
 const app = express();

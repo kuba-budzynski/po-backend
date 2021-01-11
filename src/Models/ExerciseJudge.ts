@@ -1,5 +1,5 @@
 import {prop, Ref} from "@typegoose/typegoose";
-import {User} from "./utils/CommonUtils";
+import User from "./helpers/User";
 import Session from "./Session";
 import Exercise from "./Exercise";
 

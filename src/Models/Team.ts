@@ -1,6 +1,6 @@
 import {prop, Ref} from "@typegoose/typegoose";
 import Session from "./Session";
-import {User} from "./utils/CommonUtils";
+import User from "./helpers/User";
 import Solution from "./Solution";
 
 export enum SchoolType {

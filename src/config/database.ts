@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Logger from '../logger'
-import settings from './../settings';
+import Logger from './logger'
+import settings from './settings';
 const logger = new Logger('mongoDB');
 
 class Connection{

@@ -21,7 +21,7 @@ export class LoginData {
     public role!: UserRole
 }
 
-export class User {
+export default class User {
     @prop({required: true, default: LoginData})
     public loginData!: LoginData
 }
