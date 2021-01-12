@@ -7,31 +7,37 @@ import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 
 export type TeamGestSolutionListDTO = {
-    id: string,
-    sent: string,
-    status: SolutionStatus,
-    solutionTime?: number,
-    file: {
-        name: string,
-        size: number,
-    },
-}[]
+    canSend: boolean,
+    solutions: {
+        id: string,
+        sent: string,
+        status: SolutionStatus,
+        solutionTime?: number,
+        file: {
+            name: string,
+            size: number,
+        },
+    }[]
+}
 
 
 class TeamPanelService {
     async getSolutionList(teamId: string, exerciseId: string) {
         const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).populate("file")
 
-        const dto: TeamGestSolutionListDTO = solutions.map((solution) => ({
-            id: solution.id,
-            sent: solution.sent.toISOString(),
-            status: solution.status,
-            solutionTime: solution.solutionTime,
-            file: {
-                name: solution.solutionFile.name,
-                size: solution.solutionFile.size,
-            }
-        }))
+        const dto: TeamGestSolutionListDTO = {
+            canSend: solutions.every((solution) => solution.status !== SolutionStatus.PENDING && solution.status !== SolutionStatus.CORRECT),
+            solutions: solutions.map((solution) => ({
+                id: solution.id,
+                sent: solution.sent.toISOString(),
+                status: solution.status,
+                solutionTime: solution.solutionTime,
+                file: {
+                    name: solution.solutionFile.name,
+                    size: solution.solutionFile.size,
+                }
+            }))
+        };
         return dto;
     }
 
