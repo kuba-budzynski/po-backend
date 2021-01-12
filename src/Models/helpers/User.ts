@@ -22,6 +22,6 @@ export class LoginData {
 }
 
 export default class User {
-    @prop({required: true, default: LoginData})
+    @prop({required: true})
     public loginData!: LoginData
 }

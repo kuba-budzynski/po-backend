@@ -48,8 +48,8 @@ export default class Session {
     @prop({ref: `ExerciseJudge`, default: []})
     public exerciseJudges: Ref<ExerciseJudge>[]
 
-    @prop({default: Registration})
-    public registration!: Registration
+    @prop({default: new Registration()})
+    public registration: Registration
 
     @prop({default: false})
     public isRankingFrozen: boolean

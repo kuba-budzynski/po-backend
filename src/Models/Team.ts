@@ -54,16 +54,16 @@ export default class Team extends User {
     })
     public members!: Member[];
 
-    @prop({ required: true, ref: `Session` })
+    @prop({required: true, ref: `Session`})
     public session!: Ref<Session>
 
     @prop({required: true, enum: TeamStatus, default: TeamStatus.REGISTERED})
     public status!: TeamStatus;
 
-    @prop({ required: true, ref: `Solution`, default: [] })
+    @prop({required: true, ref: `Solution`, default: []})
     public solutions!: Ref<Solution>[]
 
-    @prop({required: true, default: Score})
+    @prop({required: true, default: new Score()})
     public scores!: Score
 
     @prop()
