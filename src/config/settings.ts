@@ -10,7 +10,7 @@ const settings = {
         hostname: process.env.MONGODB_HOSTNAME || "",
         username: process.env.MONGODB_USERNAME || "",
         password: process.env.MONGODB_PASSWORD || "",
-        defaultDB: process.env.MONODB_DEFAULTDB || "",
+        defaultDB: process.env.MONGODB_DEFAULTDB || "",
     },
     server: {
         ip: "145.239.83.230"
