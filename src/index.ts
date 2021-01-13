@@ -7,8 +7,6 @@ import './config/database';
 import settings from './config/settings';
 import configRoutes from "./config/routes";
 import configSwagger from "./config/swagger";
-import * as https from "https";
-import {SSL_OPTIONS} from "./config/ssl";
 
 const logger = new Logger("routing");
 const app = express();
@@ -29,6 +27,6 @@ configRoutes(app);
 
 // --------------------------------------------------------------------------------------------
 
-https.createServer(SSL_OPTIONS, app).listen(settings.port, () => {
+app.listen(settings.port, () => {
     console.log(`Listening on port ${settings.port}`);
 })
