@@ -5,6 +5,7 @@ import multer from "multer";
 import Exercise from "../Models/Exercise";
 import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
+import {PythonVerify} from "./utils/SolutionVerify";
 
 export type TeamGestSolutionListDTO = {
     canSend: boolean,
@@ -77,20 +78,22 @@ class TeamPanelService {
         if (!file)
             throw new Error("Nie przesłano pliku");
 
-        if (!file.originalname.endsWith(".js"))
+        if (!file.originalname.endsWith(".py"))
             throw new Error("Plik nie jest wspierany");
 
-        const solution = await Repository.SolutionRepo.create<any>({
-            author: teamId,
-            exercise: exerciseId,
-            solutionFile: {
-                code: request.file.buffer,
-                size: request.file.size,
-                name: request.file.originalname,
-            },
-        });
-
-        await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
+        // const solution = await Repository.SolutionRepo.create<any>({
+        //     author: teamId,
+        //     exercise: exerciseId,
+        //     solutionFile: {
+        //         code: request.file.buffer,
+        //         size: request.file.size,
+        //         name: request.file.originalname,
+        //     },
+        // });
+        //
+        // await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
+        const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
+        console.log(verified)
     }
 }
 
