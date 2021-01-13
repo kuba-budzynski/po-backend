@@ -81,19 +81,27 @@ class TeamPanelService {
         if (!file.originalname.endsWith(".py"))
             throw new Error("Plik nie jest wspierany");
 
-        // const solution = await Repository.SolutionRepo.create<any>({
-        //     author: teamId,
-        //     exercise: exerciseId,
-        //     solutionFile: {
-        //         code: request.file.buffer,
-        //         size: request.file.size,
-        //         name: request.file.originalname,
-        //     },
-        // });
-        //
-        // await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
-        const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
-        console.log(verified)
+        const solution = await Repository.SolutionRepo.create<any>({
+            author: teamId,
+            exercise: exerciseId,
+            solutionFile: {
+                code: request.file.buffer,
+                size: request.file.size,
+                name: request.file.originalname,
+            },
+        });
+
+        await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
+        // TODO: delete unnecessary timeouts
+        new Promise(async () => {
+            const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
+            console.log("sprawdzono! status:", verified)
+            setTimeout(async () => {
+                console.log("update poszedl na status", verified.status)
+                await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
+            }, 5000)
+        })
+        console.log("koniec")
     }
 }
 
