@@ -1,7 +1,7 @@
 import {prop, Ref} from "@typegoose/typegoose";
 import ExerciseJudge from "./ExerciseJudge";
 
-class Test {
+export class Test {
     @prop({required: true})
     public input!: string
 
