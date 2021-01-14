@@ -6,14 +6,16 @@ import Exercise from "../Models/Exercise";
 import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 import {PythonVerify} from "./utils/SolutionVerify";
+import dayjs from "dayjs";
 
-export type TeamGestSolutionListDTO = {
+export type TeamGetSolutionListDTO = {
     canSend: boolean,
+    shouldRefetch: boolean,
     solutions: {
         id: string,
         sent: string,
         status: SolutionStatus,
-        solutionTime?: number,
+        solutionTime: number,
         file: {
             name: string,
             size: number,
@@ -24,15 +26,16 @@ export type TeamGestSolutionListDTO = {
 
 class TeamPanelService {
     async getSolutionList(teamId: string, exerciseId: string) {
-        const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).populate("file")
+        const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).sort({"sent": -1})
 
-        const dto: TeamGestSolutionListDTO = {
+        const dto: TeamGetSolutionListDTO = {
             canSend: solutions.every((solution) => solution.status !== SolutionStatus.PENDING && solution.status !== SolutionStatus.CORRECT),
+            shouldRefetch: solutions.some((solution) => solution.status === SolutionStatus.PENDING),
             solutions: solutions.map((solution) => ({
                 id: solution.id,
                 sent: solution.sent.toISOString(),
                 status: solution.status,
-                solutionTime: solution.solutionTime,
+                solutionTime: solution?.solutionTime,
                 file: {
                     name: solution.solutionFile.name,
                     size: solution.solutionFile.size,
@@ -84,6 +87,8 @@ class TeamPanelService {
         const solution = await Repository.SolutionRepo.create<any>({
             author: teamId,
             exercise: exerciseId,
+            solutionTime: dayjs((team.session as Session).start).diff(dayjs(), 'm'),
+            sent: new Date(),
             solutionFile: {
                 code: request.file.buffer,
                 size: request.file.size,

@@ -32,7 +32,7 @@ export default class Solution {
     @prop({ required: true, ref: `Exercise` })
     public exercise!: Ref<Exercise>
 
-    @prop({required: true, default: new Date()})
+    @prop({required: true})
     public sent!: Date
 
     @prop({required: true, enum: SolutionStatus, default: SolutionStatus.PENDING})
