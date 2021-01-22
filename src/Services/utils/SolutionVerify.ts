@@ -3,7 +3,7 @@ import fs from "fs";
 const fsPromises = fs.promises;
 import {spawn} from "child_process";
 import {Test} from "../../Models/Exercise";
-var path = require('path');
+import path from "path";
 
 type ReturnType = { status: SolutionStatus, message?: string }
 type SolutionVerify = (code: Buffer, tests: Test[], solutionId: string) => Promise<ReturnType>
@@ -13,6 +13,7 @@ export const PythonVerify:SolutionVerify = async (code, tests, solutionId) => {
     const path = FILE_PATH(`${solutionId}.py`)
     await fsPromises.writeFile(path, code)
     const format = (status: SolutionStatus, message?: string) => ({ status, ...(message && { message }) })
+
     const promises =
         tests.map((test: Test) => new Promise((resolve, reject) => {
             const { input, output } = test

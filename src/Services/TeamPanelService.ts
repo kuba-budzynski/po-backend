@@ -71,7 +71,7 @@ class TeamPanelService {
         if ((team.session as Session).exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
             throw new Error("Ta drużyna nie może wysyłać rozwiązań do tego zadania.");
 
-        const multerSingle = multer({limits: {fileSize: 2000000}}).single("solutionFile");
+        const multerSingle = multer({limits: {fileSize: 2097152}}).single("solutionFile");
         const file = await new Promise<Express.Multer.File>((resolve, reject) => {
             multerSingle(request, undefined, (error) => {
                 if (error) reject(error);
@@ -97,16 +97,10 @@ class TeamPanelService {
         });
 
         await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
-        // TODO: delete unnecessary timeouts
         new Promise(async () => {
             const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
-            console.log("sprawdzono! status:", verified)
-            setTimeout(async () => {
-                console.log("update poszedl na status", verified.status)
-                await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
-            }, 5000)
+            await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
         })
-        console.log("koniec")
     }
 }
 
