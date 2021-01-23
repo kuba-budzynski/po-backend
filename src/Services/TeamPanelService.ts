@@ -7,6 +7,8 @@ import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 import {PythonVerify} from "./utils/SolutionVerify";
 import dayjs from "dayjs";
+import { BadRequestError } from "../config/handleError";
+import {isValidObjectId} from "mongoose";
 
 export type TeamGetSolutionListDTO = {
     canSend: boolean,
@@ -26,6 +28,10 @@ export type TeamGetSolutionListDTO = {
 
 class TeamPanelService {
     async getSolutionList(teamId: string, exerciseId: string) {
+        if (!isValidObjectId(teamId))
+            throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+        if (!isValidObjectId(exerciseId))
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
         const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).sort({"sent": -1})
 
         const dto: TeamGetSolutionListDTO = {
@@ -46,10 +52,14 @@ class TeamPanelService {
     }
 
     async createSolution(teamId: string, exerciseId: string, request: express.Request) {
+        if (!isValidObjectId(exerciseId))
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
         const exercise = await Repository.ExerciseRepo.findById(exerciseId)
         if (!exercise)
-            throw new Error("Nie znaleziono zadania o podanym id.");
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
+        if (!isValidObjectId(teamId))
+            throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
         const team = await Repository.TeamRepo
             .findById(teamId)
             .populate("solutions")
@@ -63,15 +73,15 @@ class TeamPanelService {
             .exec()
 
         if (!team)
-            throw new Error("Nie znaleziono drużyny o podanym id.");
+            throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
 
         if (team.solutions.some((solution: DocumentType<Solution>) => (solution.status === SolutionStatus.CORRECT || solution.status === SolutionStatus.PENDING) && solution.exercise.toString() === exerciseId))
-            throw new Error("To zadanie ma już rozwiązanie oczekujące lub zaakceptowane.");
+            throw new BadRequestError("To zadanie ma już rozwiązanie oczekujące lub zaakceptowane.")
 
         if ((team.session as Session).exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
-            throw new Error("Ta drużyna nie może wysyłać rozwiązań do tego zadania.");
+            throw new BadRequestError("Ta drużyna nie może wysyłać rozwiązań do tego zadania.")
 
-        const multerSingle = multer({limits: {fileSize: 2097152}}).single("solutionFile");
+        const multerSingle = multer({limits: {fileSize: 2097152}}).single("solutionFile")
         const file = await new Promise<Express.Multer.File>((resolve, reject) => {
             multerSingle(request, undefined, (error) => {
                 if (error) reject(error);
@@ -79,10 +89,10 @@ class TeamPanelService {
             })
         });
         if (!file)
-            throw new Error("Nie przesłano pliku");
+            throw new BadRequestError("Nie przesłano pliku")
 
         if (!file.originalname.endsWith(".py"))
-            throw new Error("Plik nie jest wspierany");
+            throw new BadRequestError("Plik nie jest wspierany")
 
         const solution = await Repository.SolutionRepo.create<any>({
             author: teamId,
@@ -97,11 +107,9 @@ class TeamPanelService {
         });
 
         await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
-        new Promise(async () => {
-            const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
-            await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
-        })
+        const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
+        await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
     }
 }
 
-export default new TeamPanelService();
+export default new TeamPanelService()

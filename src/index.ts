@@ -7,6 +7,7 @@ import './config/database';
 import settings from './config/settings';
 import configRoutes from "./config/routes";
 import configSwagger from "./config/swagger";
+import configHandleErrors from "./config/handleError";
 
 const logger = new Logger("routing");
 const app = express();
@@ -24,6 +25,8 @@ app.get("/", (req, res) => {
 
 configSwagger(app);
 configRoutes(app);
+
+configHandleErrors(app);
 
 // --------------------------------------------------------------------------------------------
 

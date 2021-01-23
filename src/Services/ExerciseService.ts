@@ -1,4 +1,6 @@
+import { BadRequestError } from "../config/handleError";
 import Repository from "../Repositories/Repository";
+import {isValidObjectId} from "mongoose";
 
 export type GetExerciseDTO = {
     name: string,
@@ -8,9 +10,11 @@ export type GetExerciseDTO = {
 
 class ExerciseService {
     async getExercise(exerciseId: string) {
+        if (!isValidObjectId(exerciseId))
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
         const exercise = await Repository.ExerciseRepo.findById(exerciseId)
         if (!exercise)
-            throw new Error("Zadanie o takim id nie istnieje.")
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
         const dto: GetExerciseDTO = {
             name: exercise.name,
