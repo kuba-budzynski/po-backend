@@ -7,7 +7,7 @@ import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 import {PythonVerify} from "./utils/SolutionVerify";
 import dayjs from "dayjs";
-import { BadRequestError } from "../config/handleError";
+import { BadRequestError, UnauthorizedError } from "../config/handleError";
 import {isValidObjectId} from "mongoose";
 
 export type TeamGetSolutionListDTO = {
@@ -27,11 +27,34 @@ export type TeamGetSolutionListDTO = {
 
 
 class TeamPanelService {
-    async getSolutionList(teamId: string, exerciseId: string) {
+    async getSolutionList(teamId: string, sessionId: string, exerciseId: string) {
+        if (!isValidObjectId(sessionId))
+            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
+        const session = await Repository.SessionRepo.findById(sessionId)
+            .populate("exercises")
+            .exec()
+        if (!session)
+            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
+
         if (!isValidObjectId(teamId))
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+        const team = await Repository.TeamRepo
+            .findById(teamId)
+            .populate("session")
+            .exec()
+        if (!team)
+            throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+
+        if ((team.session as DocumentType<Session>).id !== sessionId)
+            throw new UnauthorizedError("Drużyna nie ma dostępu do tej sesji.")
+
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
+
+        if (session.exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
+            throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
+
+
         const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).sort({"sent": -1})
 
         const dto: TeamGetSolutionListDTO = {
@@ -51,35 +74,39 @@ class TeamPanelService {
         return dto;
     }
 
-    async createSolution(teamId: string, exerciseId: string, request: express.Request) {
-        if (!isValidObjectId(exerciseId))
-            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
-        const exercise = await Repository.ExerciseRepo.findById(exerciseId)
-        if (!exercise)
-            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
+    async createSolution(teamId: string, sessionId: string, exerciseId: string, request: express.Request) {
+        if (!isValidObjectId(sessionId))
+            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
+        const session = await Repository.SessionRepo.findById(sessionId)
+            .populate("exercises")
+            .exec()
+        if (!session)
+            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
 
         if (!isValidObjectId(teamId))
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
         const team = await Repository.TeamRepo
             .findById(teamId)
             .populate("solutions")
-            .populate({
-                path: "session",
-                populate: {
-                    path: "exercises",
-                    model: 'Exercise',
-                }
-            })
+            .populate("session")
             .exec()
-
         if (!team)
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
 
+        if ((team.session as DocumentType<Session>).id !== sessionId)
+            throw new UnauthorizedError("Drużyna nie ma dostępu do tej sesji.")
+
+        if (!isValidObjectId(exerciseId))
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
+        const exercise = await Repository.ExerciseRepo.findById(exerciseId)
+        if (!exercise)
+            throw new BadRequestError("Nie znaleziono zadania o podanym id.")
+
+        if (session.exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
+            throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
+
         if (team.solutions.some((solution: DocumentType<Solution>) => (solution.status === SolutionStatus.CORRECT || solution.status === SolutionStatus.PENDING) && solution.exercise.toString() === exerciseId))
             throw new BadRequestError("To zadanie ma już rozwiązanie oczekujące lub zaakceptowane.")
-
-        if ((team.session as Session).exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
-            throw new BadRequestError("Ta drużyna nie może wysyłać rozwiązań do tego zadania.")
 
         const multerSingle = multer({limits: {fileSize: 2097152}}).single("solutionFile")
         const file = await new Promise<Express.Multer.File>((resolve, reject) => {
@@ -97,7 +124,7 @@ class TeamPanelService {
         const solution = await Repository.SolutionRepo.create<any>({
             author: teamId,
             exercise: exerciseId,
-            solutionTime: dayjs((team.session as Session).start).diff(dayjs(), 'm'),
+            solutionTime: dayjs(session.start).diff(dayjs(), 'm'),
             sent: new Date(),
             solutionFile: {
                 code: request.file.buffer,

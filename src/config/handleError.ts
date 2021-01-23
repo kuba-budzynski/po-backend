@@ -18,6 +18,7 @@ const RequestErrorFactory = (code: number, type: string) =>
     }
 
 export const BadRequestError = RequestErrorFactory(400, "Bad Request")
+export const UnauthorizedError = RequestErrorFactory(401, "Unauthorized")
 export const NotFoundError = RequestErrorFactory(404, "Not Found")
 
 
