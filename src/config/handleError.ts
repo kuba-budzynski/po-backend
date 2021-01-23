@@ -28,15 +28,15 @@ const configHandleErrors = (app: Express) => {
     })
 
     app.use((err, req: Request, res: Response, next: NextFunction) => {
-        if (!(err instanceof RequestError) && err instanceof Error)
-            return res.status(500).json({
-                message: "Internal Server Error"
-            })
         if (err instanceof RequestError) {
             return res.status(err.code).json({
                 message: `${err?.message ? `${err.message} ` : ''}[${err.type}]`
             })
         }
+        if (err instanceof Error)
+            return res.status(500).json({
+                message: "Internal Server Error"
+            })
 
         next()
     })
