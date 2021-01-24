@@ -1,25 +1,45 @@
-import {Controller, Get, Path, Post, Query, Request, Route} from "tsoa";
+import {Controller, Get, Header, Path, Post, Request, Route} from "tsoa";
 import TeamPanelService from "../Services/TeamPanelService";
 import express from "express";
+import SessionService from "../Services/SessionService";
+import SolutionService from "../Services/SolutionService";
+import ExerciseService from "../Services/ExerciseService";
+import RankingService from "../Services/RankingService";
 
-@Route("team-panel/{sessionId}/exercise")
+@Route("team-panel")
 export class TeamPanelController extends Controller {
-    @Get("{exerciseId}/solution")
-    public async getSolution(
-        @Query() teamId: string, // instead of receiving one from jwt
-        @Path() exerciseId: string,
-        @Path() sessionId: string,
+    @Get("dashboard")
+    public async getDashboard(
+        @Header() teamId: string,
     ) {
-        return TeamPanelService.getSolutionList(teamId, sessionId, exerciseId);
+        const sessionId = await TeamPanelService.getSession(teamId)
+        const sesja = await SessionService.getSession(sessionId);
+        const solutions = await SolutionService.getSolutions(teamId);
+        const exercises = await ExerciseService.getExercises(sessionId);
+        const ranking = await RankingService.getCurrentRanking(sessionId);
+        return {
+            sessionId: sessionId,
+            exercises: exercises,
+            solutions: solutions,
+            ranking: ranking,
+            sesja: sesja
+        }
     }
 
-    @Post("{exerciseId}/solution")
-    public async createSolution(
-        @Query() teamId: string, // instead of receiving one from jwt
+    @Get("exercise/{exerciseId}/solution")
+    public async getSolution(
+        @Header() teamId: string,
         @Path() exerciseId: string,
-        @Path() sessionId: string,
+    ) {
+        return TeamPanelService.getSolutionList(teamId, exerciseId);
+    }
+
+    @Post("exercise/{exerciseId}/solution")
+    public async createSolution(
+        @Header() teamId: string,
+        @Path() exerciseId: string,
         @Request() request: express.Request,
     ): Promise<any> {
-        return TeamPanelService.createSolution(teamId, sessionId, exerciseId, request);
+        return TeamPanelService.createSolution(teamId, exerciseId, request);
     }
 }

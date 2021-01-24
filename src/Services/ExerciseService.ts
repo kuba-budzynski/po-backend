@@ -10,21 +10,12 @@ export type GetExerciseDTO = {
     content: string,
 }
 class ExerciseService {
-    async getExercise(sessionId: string, exerciseId: string) {
-        if (!isValidObjectId(sessionId))
-            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-        const session = await Repository.SessionRepo.findById(sessionId)
-        if (!session)
-            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-
+    async getExercise(exerciseId: string) {
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
         const exercise = await Repository.ExerciseRepo.findById(exerciseId)
         if (!exercise)
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
-
-        if (session.exercises.every(exercise => exercise.toString() !== exerciseId))
-            throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
         const dto: GetExerciseDTO = {
             name: exercise.name,
@@ -48,7 +39,7 @@ class ExerciseService {
                 name: e.name,
                 number: e.number
             }))
-        };
+        }
     }
 }
 

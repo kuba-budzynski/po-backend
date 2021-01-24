@@ -1,10 +1,9 @@
-import { Controller, Get, Path, Post, Request, Route, } from "tsoa";
+import {Controller, Get, Path, Route,} from "tsoa";
 import SessionService from "../Services/SessionService";
-import express from 'express';
 import ExerciseService from "../Services/ExerciseService";
 import RankingService from "../Services/RankingService";
 
-@Route("{sessionId}/dashboard")
+@Route("dashboard/{sessionId}")
 export class DashboardController extends Controller {
     @Get()
     public async getDashboard(

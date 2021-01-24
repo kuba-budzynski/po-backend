@@ -5,7 +5,7 @@ import Exercise from "../Models/Exercise";
 import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 import dayjs from "dayjs";
-import {BadRequestError, UnauthorizedError} from "../config/handleError";
+import {BadRequestError} from "../config/handleError";
 import {isValidObjectId} from "mongoose";
 import RequestFile from "./utils/RequestFile";
 import {SolutionVerify} from "./utils/verifySolution/SolutionVerify";
@@ -26,15 +26,7 @@ export type TeamGetSolutionListDTO = {
     }[]
 }
 class TeamPanelService {
-    async getSolutionList(teamId: string, sessionId: string, exerciseId: string) {
-        if (!isValidObjectId(sessionId))
-            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-        const session = await Repository.SessionRepo.findById(sessionId)
-            .populate("exercises")
-            .exec()
-        if (!session)
-            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-
+    async getSolutionList(teamId: string, exerciseId: string) {
         if (!isValidObjectId(teamId))
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
         const team = await Repository.TeamRepo
@@ -44,13 +36,10 @@ class TeamPanelService {
         if (!team)
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
 
-        if ((team.session as DocumentType<Session>).id !== sessionId)
-            throw new UnauthorizedError("Drużyna nie ma dostępu do tej sesji.")
-
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
-        if (session.exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
+        if ((team.session as DocumentType<Session>).exercises.every((exercise: DocumentType<Exercise>) => exercise.toString() !== exerciseId))
             throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
 
@@ -73,15 +62,7 @@ class TeamPanelService {
         return dto;
     }
 
-    async createSolution(teamId: string, sessionId: string, exerciseId: string, request: express.Request) {
-        if (!isValidObjectId(sessionId))
-            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-        const session = await Repository.SessionRepo.findById(sessionId)
-            .populate("exercises")
-            .exec()
-        if (!session)
-            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-
+    async createSolution(teamId: string, exerciseId: string, request: express.Request) {
         if (!isValidObjectId(teamId))
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
         const team = await Repository.TeamRepo
@@ -92,16 +73,13 @@ class TeamPanelService {
         if (!team)
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
 
-        if ((team.session as DocumentType<Session>).id !== sessionId)
-            throw new UnauthorizedError("Drużyna nie ma dostępu do tej sesji.")
-
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
         const exercise = await Repository.ExerciseRepo.findById(exerciseId)
         if (!exercise)
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
-        if (session.exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
+        if ((team.session as DocumentType<Session>).exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
             throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
         if (team.solutions.some((solution: DocumentType<Solution>) => (solution.status === SolutionStatus.CORRECT || solution.status === SolutionStatus.PENDING) && solution.exercise.toString() === exerciseId))
@@ -118,7 +96,7 @@ class TeamPanelService {
         const solution = await Repository.SolutionRepo.create<any>({
             author: teamId,
             exercise: exerciseId,
-            solutionTime: dayjs(session.start).diff(dayjs(), 'm'),
+            solutionTime: dayjs((team.session as DocumentType<Session>).start).diff(dayjs(), 'm'),
             sent: new Date(),
             solutionFile: {
                 code: request.file.buffer,
