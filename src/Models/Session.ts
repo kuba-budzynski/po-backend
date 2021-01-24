@@ -6,13 +6,13 @@ import ExerciseJudge from "./ExerciseJudge";
 import Thread from "./Thread";
 
 export class Registration {
-    @prop()
+    @prop({required: false})
     public start: Date
 
-    @prop()
+    @prop({ required: false })
     public end: Date
 
-    @prop()
+    @prop({ required: false })
     public results: Date
 }
 
@@ -42,7 +42,7 @@ export default class Session {
     @prop({required: true, ref: `Thread`, default: []})
     public threads!: Ref<Thread>[]
 
-    @prop({ref: `PrimaryJudge`})
+    @prop({ref: `PrimaryJudge`, required: false})
     public primaryJudges: Ref<PrimaryJudge>
 
     @prop({ref: `ExerciseJudge`, default: []})

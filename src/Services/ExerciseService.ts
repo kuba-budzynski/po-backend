@@ -9,7 +9,6 @@ export type GetExerciseDTO = {
     number: number,
     content: string,
 }
-
 class ExerciseService {
     async getExercise(sessionId: string, exerciseId: string) {
         if (!isValidObjectId(sessionId))
@@ -35,6 +34,23 @@ class ExerciseService {
             content: exercise.content,
         }
         return dto
+    }
+
+    async getExercises(sessionId: string){
+        if (!isValidObjectId(sessionId))
+            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
+        const session = await Repository.SessionRepo.findById(sessionId)
+            .populate("exercises").exec();
+        if (!session)
+            throw new BadRequestError("Nie znaleziono sesji o podanym id.")
+        else {
+            const exercises = session.exercises as DocumentType<Exercise>[]
+            return exercises.map(e => ({
+                id: e._id,
+                name: e.name,
+                number: e.number
+            }))
+        };
     }
 }
 

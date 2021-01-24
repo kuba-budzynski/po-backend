@@ -24,8 +24,6 @@ export type TeamGetSolutionListDTO = {
         },
     }[]
 }
-
-
 class TeamPanelService {
     async getSolutionList(teamId: string, sessionId: string, exerciseId: string) {
         if (!isValidObjectId(sessionId))
@@ -136,6 +134,16 @@ class TeamPanelService {
         await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
         const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
         await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
+    }
+
+    async getSession(teamId: string){
+        if (!isValidObjectId(teamId))
+            throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+        const team = await Repository.TeamRepo
+            .findById(teamId)
+        if (!team)
+            throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+        else return team.session.toString();
     }
 }
 
