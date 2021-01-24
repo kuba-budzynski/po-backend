@@ -1,35 +1,8 @@
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import Logger from './config/logger'
-import bodyParser from "body-parser";
-import './config/database';
-import settings from './config/settings';
-import configRoutes from "./config/routes";
-import configSwagger from "./config/swagger";
-import configHandleErrors from "./config/handleError";
+import server from "./server";
+import settings from "./config/settings";
+import {connectToDatabase} from "./config/database";
 
-const logger = new Logger("routing");
-const app = express();
-
-app.use(helmet());
-app.use(cors());
-app.use(bodyParser.json());
-
-// --------------------------------------------------------------------------------------------
-
-app.get("/", (req, res) => {
-    res.send("OK");
-    logger.info(`${req.method} ${req.path}`);
-});
-
-configSwagger(app);
-configRoutes(app);
-
-configHandleErrors(app);
-
-// --------------------------------------------------------------------------------------------
-
-app.listen(settings.port, () => {
+server.listen(settings.port, async () => {
     console.log(`Listening on port ${settings.port}`);
+    await connectToDatabase();
 })
