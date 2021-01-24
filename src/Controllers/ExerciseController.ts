@@ -4,8 +4,8 @@ import ExerciseService, {GetExerciseDTO} from "../Services/ExerciseService";
 @Route("exercise")
 export class ExerciseController extends Controller {
     /**
-     * Gets the title, number and contents of a single exercise.
-     * @param exerciseId Unique exercise identifier
+     * Pobierz dane dotyczące pojedynczego zadania.
+     * @param exerciseId Unikalny identyfikator zadania
      */
     @Get("{exerciseId}")
     public async getExercise(

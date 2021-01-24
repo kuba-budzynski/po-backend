@@ -28,9 +28,9 @@ export class TeamPanelController extends Controller {
     }
 
     /**
-     * Gets the list of all solutions sent by a team in an exercise.
-     * @param teamId Unique team identifier
-     * @param exerciseId Unique exercise identifier
+     * Pobierz listę wszystkich rozwiązań, przesłanych przez drużynę w danym zadaniu.
+     * @param teamId Unikalny identyfikator drużyny
+     * @param exerciseId Unikalny identyfikator zadania
      */
     @Get("exercise/{exerciseId}/solution")
     public async getSolution(
@@ -41,9 +41,9 @@ export class TeamPanelController extends Controller {
     }
 
     /**
-     * Lets the team submit their solution to the exercise.
-     * @param teamId Unique team identifier
-     * @param exerciseId Unique exercise identifier
+     * Wyślij rozwiązanie do danego zadania, jako dana drużyna.
+     * @param teamId Unikalny identyfikator drużyny
+     * @param exerciseId Unikalny identyfikator zadania
      * @param request
      */
     @Post("exercise/{exerciseId}/solution")
