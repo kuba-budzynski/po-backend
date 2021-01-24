@@ -10,30 +10,10 @@
     "specMerging": "recursive",
     "spec": {
       "paths": {
-        "/team-panel/{sessionId}/exercise/{exerciseId}/solution": {
+        "/team-panel/exercise/{exerciseId}/solution": {
           "post": {
             "consumes": [
               "multipart/form-data"
-            ],
-            "parameters": [
-              {
-                "in": "query",
-                "name": "teamId",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "in": "path",
-                "name": "sessionId",
-                "required": true,
-                "type": "string"
-              },
-              {
-                "in": "path",
-                "name": "exerciseId",
-                "required": true,
-                "type": "string"
-              }
             ],
             "requestBody": {
               "content": {
