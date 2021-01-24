@@ -1,6 +1,8 @@
 import {BadRequestError} from "../config/handleError";
 import Repository from "../Repositories/Repository";
 import {isValidObjectId} from "mongoose";
+import { DocumentType } from "@typegoose/typegoose";
+import Exercise from "../Models/Exercise";
 
 export type GetExerciseDTO = {
     name: string,
