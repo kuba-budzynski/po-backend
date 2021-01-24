@@ -1,8 +1,6 @@
-import { BadRequestError } from "../config/handleError";
+import {BadRequestError} from "../config/handleError";
 import Repository from "../Repositories/Repository";
 import {isValidObjectId} from "mongoose";
-import {DocumentType} from "@typegoose/typegoose";
-import Exercise from "../Models/Exercise";
 
 export type GetExerciseDTO = {
     name: string,
@@ -14,8 +12,6 @@ class ExerciseService {
         if (!isValidObjectId(sessionId))
             throw new BadRequestError("Nie znaleziono sesji o podanym id.")
         const session = await Repository.SessionRepo.findById(sessionId)
-            .populate("exercises")
-            .exec()
         if (!session)
             throw new BadRequestError("Nie znaleziono sesji o podanym id.")
 
@@ -25,7 +21,7 @@ class ExerciseService {
         if (!exercise)
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
-        if (session.exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
+        if (session.exercises.every(exercise => exercise.toString() !== exerciseId))
             throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
         const dto: GetExerciseDTO = {

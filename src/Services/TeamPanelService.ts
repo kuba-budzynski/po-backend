@@ -1,14 +1,15 @@
 import Repository from "../Repositories/Repository";
 import Solution, {SolutionStatus} from "../Models/Solution";
-import express, {Express} from "express";
-import multer from "multer";
+import express from "express";
 import Exercise from "../Models/Exercise";
 import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
-import {PythonVerify} from "./utils/SolutionVerify";
 import dayjs from "dayjs";
-import { BadRequestError, UnauthorizedError } from "../config/handleError";
+import {BadRequestError, UnauthorizedError} from "../config/handleError";
 import {isValidObjectId} from "mongoose";
+import RequestFile from "./utils/RequestFile";
+import {SolutionVerify} from "./utils/verifySolution/SolutionVerify";
+import {PythonStrategy} from "./utils/verifySolution/PythonStrategy";
 
 export type TeamGetSolutionListDTO = {
     canSend: boolean,
@@ -106,15 +107,10 @@ class TeamPanelService {
         if (team.solutions.some((solution: DocumentType<Solution>) => (solution.status === SolutionStatus.CORRECT || solution.status === SolutionStatus.PENDING) && solution.exercise.toString() === exerciseId))
             throw new BadRequestError("To zadanie ma już rozwiązanie oczekujące lub zaakceptowane.")
 
-        const multerSingle = multer({limits: {fileSize: 2097152}}).single("solutionFile")
-        const file = await new Promise<Express.Multer.File>((resolve, reject) => {
-            multerSingle(request, undefined, (error) => {
-                if (error) reject(error);
-                resolve(request.file);
-            })
-        });
+        const requestFile = new RequestFile("solutionFile")
+        const file = await requestFile.attachFile(request)
         if (!file)
-            throw new BadRequestError("Nie przesłano pliku")
+            throw new BadRequestError("Błąd odczytu pliku")
 
         if (!file.originalname.endsWith(".py"))
             throw new BadRequestError("Plik nie jest wspierany")
@@ -129,11 +125,14 @@ class TeamPanelService {
                 size: request.file.size,
                 name: request.file.originalname,
             },
-        });
+        })
 
         await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
-        const verified = await PythonVerify(request.file.buffer, exercise.tests, Math.floor(Math.random() * 100000).toString())
-        await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verified.status })
+
+        const verify = new SolutionVerify(new PythonStrategy())
+        await verify.createFile(request.file.buffer, solution.id.toString())
+        const verifyReponse = await verify.test(exercise.tests)
+        await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verifyReponse.status })
     }
 
     async getSession(teamId: string){
