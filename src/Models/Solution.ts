@@ -43,4 +43,16 @@ export default class Solution {
 
     @prop({required: true})
     public solutionFile!: SolutionFile
+
+    public isBlocking() {
+        return this.isStatus(SolutionStatus.CORRECT) || this.isStatus(SolutionStatus.PENDING)
+    }
+
+    public belongsToExercise(exerciseId: string) {
+        return this.exercise.toString() === exerciseId
+    }
+
+    public isStatus(status: SolutionStatus) {
+        return this.status === status
+    }
 }

@@ -1,7 +1,6 @@
 import Repository from "../Repositories/Repository";
 import Solution, {SolutionStatus} from "../Models/Solution";
 import express from "express";
-import Exercise from "../Models/Exercise";
 import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 import dayjs from "dayjs";
@@ -38,18 +37,18 @@ class TeamPanelService {
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
-        if ((team.session as DocumentType<Session>).exercises.every((exercise: DocumentType<Exercise>) => exercise.toString() !== exerciseId))
+        if (!(team.session as DocumentType<Session>).exercises.some((exercise) => exercise.toString() === exerciseId))
             throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
 
         const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).sort({"sent": -1})
 
-        const hasPending = solutions.some((solution) => solution.status === SolutionStatus.PENDING)
-        const hasCorrect = solutions.some((solution) => solution.status === SolutionStatus.CORRECT)
+        const hasPending = solutions.some((solution) => solution.isStatus(SolutionStatus.PENDING))
+        const hasFinal = solutions.some((solution) => solution.isBlocking())
         const isSessionInProgress = (team.session as DocumentType<Session>).isInProgress()
 
         const dto: TeamGetSolutionListDTO = {
-            canSend: isSessionInProgress && !hasPending && !hasCorrect,
+            canSend: isSessionInProgress && !hasFinal,
             shouldRefetch: isSessionInProgress && hasPending,
             solutions: solutions.map((solution) => ({
                 id: solution.id,
@@ -85,10 +84,10 @@ class TeamPanelService {
         if (!(team.session as DocumentType<Session>).isInProgress())
             throw new BadRequestError("Sesja została zakończona. Nie można przesyłać już rozwiązań.")
 
-        if ((team.session as DocumentType<Session>).exercises.every((exercise) => exercise.toString() !== exerciseId))
+        if (!(team.session as DocumentType<Session>).exercises.some((exercise) => exercise.toString() === exerciseId))
             throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
-        if (team.solutions.some((solution: DocumentType<Solution>) => (solution.status === SolutionStatus.CORRECT || solution.status === SolutionStatus.PENDING) && solution.exercise.toString() === exerciseId))
+        if (team.solutions.some((solution: DocumentType<Solution>) => solution.isBlocking() && solution.belongsToExercise(exerciseId)))
             throw new BadRequestError("To zadanie ma już rozwiązanie oczekujące lub zaakceptowane.")
 
         const requestFile = new RequestFile("solutionFile")
@@ -99,7 +98,7 @@ class TeamPanelService {
         if (!file.originalname.endsWith(".py"))
             throw new BadRequestError("Plik nie jest wspierany")
 
-        const solution = await Repository.SolutionRepo.create<any>({
+        const solution = await SolutionService.createSolution({
             author: teamId,
             exercise: exerciseId,
             solutionTime: dayjs(dayjs()).diff((team.session as DocumentType<Session>).start, 'm'),
@@ -110,8 +109,6 @@ class TeamPanelService {
                 name: request.file.originalname,
             },
         })
-
-        await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
 
         await SolutionService.verifySolution(solution.id)
     }

@@ -61,6 +61,12 @@ class SolutionService {
         const verifyResponse = await verify.test((solution.exercise as DocumentType<Exercise>).tests)
         await Repository.SolutionRepo.findByIdAndUpdate(solution.id, { status: verifyResponse.status })
     }
+
+    async createSolution(solutionData: any) {
+        const solution = await Repository.SolutionRepo.create<any>(solutionData)
+        await Repository.TeamRepo.findByIdAndUpdate(solution.author.toString(), {$push: {solutions: solution}})
+        return solution
+    }
 }
 
 export default new SolutionService();

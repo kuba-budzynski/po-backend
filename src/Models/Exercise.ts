@@ -15,7 +15,6 @@ export class Test {
 
 
 export default class Exercise {
-    [x: string]: any;
     @prop({ref: `ExerciseJudge`})
     public judge?: Ref<ExerciseJudge>
 

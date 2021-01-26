@@ -10,6 +10,7 @@ export const before = async () => {
     mongoose.set("useFindAndModify", false);
     mongoose.set("useCreateIndex", true);
     mongoose.set("useUnifiedTopology", true);
+    mongoose.set("returnOriginal", false);
     await mongoose.connect(uri)
 }
 
