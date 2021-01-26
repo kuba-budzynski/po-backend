@@ -4,7 +4,7 @@ import express from "express";
 import Session from "../Models/Session";
 import {DocumentType} from "@typegoose/typegoose";
 import dayjs from "dayjs";
-import {BadRequestError} from "../config/handleError";
+import {BadRequestError, UnauthorizedError} from "../config/handleError";
 import {isValidObjectId} from "mongoose";
 import RequestFile from "./utils/RequestFile";
 import SolutionService from "./SolutionService";
@@ -33,6 +33,9 @@ class TeamPanelService {
             .exec()
         if (!team)
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+
+        if (!team.isQualified())
+            throw new UnauthorizedError("Drużyna nie jest zakwalifikowana.")
 
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
@@ -74,6 +77,9 @@ class TeamPanelService {
             .exec()
         if (!team)
             throw new BadRequestError("Nie znaleziono drużyny o podanym id.")
+
+        if (!team.isQualified())
+            throw new UnauthorizedError("Drużyna nie jest zakwalifikowana.")
 
         if (!isValidObjectId(exerciseId))
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")

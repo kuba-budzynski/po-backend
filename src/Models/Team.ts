@@ -68,4 +68,8 @@ export default class Team extends User {
 
     @prop()
     public disqualifiedReason?: string
+
+    public isQualified() {
+        return this.status === TeamStatus.QUALIFIED
+    }
 }
