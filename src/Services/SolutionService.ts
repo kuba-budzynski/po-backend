@@ -1,8 +1,11 @@
-import { BadRequestError } from "../config/handleError";
+import {BadRequestError} from "../config/handleError";
 import Repository from "../Repositories/Repository";
-import { isValidObjectId } from "mongoose";
-import { DocumentType } from "@typegoose/typegoose";
+import {isValidObjectId} from "mongoose";
+import {DocumentType} from "@typegoose/typegoose";
 import Solution from "../Models/Solution";
+import Exercise from "../Models/Exercise";
+import {SolutionVerify} from "./utils/verifySolution/SolutionVerify";
+import {PythonStrategy} from "./utils/verifySolution/PythonStrategy";
 
 export type GetSolutionsListDTO = {
     exercise: string,
@@ -47,7 +50,16 @@ class SolutionService {
                 }
             }, []);
             return grouped;
-        };
+        }
+    }
+    
+    async verifySolution(solutionId: string) {
+        const solution = await Repository.SolutionRepo.findById(solutionId).populate("exercise").exec()
+        const verify = new SolutionVerify(new PythonStrategy())
+
+        await verify.createFile(solution.solutionFile.code, solution.id)
+        const verifyResponse = await verify.test((solution.exercise as DocumentType<Exercise>).tests)
+        await Repository.SolutionRepo.findByIdAndUpdate(solution.id, { status: verifyResponse.status })
     }
 }
 

@@ -8,8 +8,7 @@ import dayjs from "dayjs";
 import {BadRequestError} from "../config/handleError";
 import {isValidObjectId} from "mongoose";
 import RequestFile from "./utils/RequestFile";
-import {SolutionVerify} from "./utils/verifySolution/SolutionVerify";
-import {PythonStrategy} from "./utils/verifySolution/PythonStrategy";
+import SolutionService from "./SolutionService";
 
 export type TeamGetSolutionListDTO = {
     canSend: boolean,
@@ -45,9 +44,13 @@ class TeamPanelService {
 
         const solutions = await Repository.SolutionRepo.find({author: teamId, exercise: exerciseId}).sort({"sent": -1})
 
+        const hasPending = solutions.some((solution) => solution.status === SolutionStatus.PENDING)
+        const hasCorrect = solutions.some((solution) => solution.status === SolutionStatus.CORRECT)
+        const isSessionInProgress = (team.session as DocumentType<Session>).isInProgress()
+
         const dto: TeamGetSolutionListDTO = {
-            canSend: solutions.every((solution) => solution.status !== SolutionStatus.PENDING && solution.status !== SolutionStatus.CORRECT),
-            shouldRefetch: solutions.some((solution) => solution.status === SolutionStatus.PENDING),
+            canSend: isSessionInProgress && !hasPending && !hasCorrect,
+            shouldRefetch: isSessionInProgress && hasPending,
             solutions: solutions.map((solution) => ({
                 id: solution.id,
                 sent: solution.sent.toISOString(),
@@ -79,7 +82,10 @@ class TeamPanelService {
         if (!exercise)
             throw new BadRequestError("Nie znaleziono zadania o podanym id.")
 
-        if ((team.session as DocumentType<Session>).exercises.every((exercise: DocumentType<Exercise>) => exercise.id !== exerciseId))
+        if (!(team.session as DocumentType<Session>).isInProgress())
+            throw new BadRequestError("Sesja została zakończona. Nie można przesyłać już rozwiązań.")
+
+        if ((team.session as DocumentType<Session>).exercises.every((exercise) => exercise.toString() !== exerciseId))
             throw new BadRequestError("W tej sesji nie znajduje się to zadanie.")
 
         if (team.solutions.some((solution: DocumentType<Solution>) => (solution.status === SolutionStatus.CORRECT || solution.status === SolutionStatus.PENDING) && solution.exercise.toString() === exerciseId))
@@ -96,7 +102,7 @@ class TeamPanelService {
         const solution = await Repository.SolutionRepo.create<any>({
             author: teamId,
             exercise: exerciseId,
-            solutionTime: dayjs((team.session as DocumentType<Session>).start).diff(dayjs(), 'm'),
+            solutionTime: dayjs(dayjs()).diff((team.session as DocumentType<Session>).start, 'm'),
             sent: new Date(),
             solutionFile: {
                 code: request.file.buffer,
@@ -107,10 +113,7 @@ class TeamPanelService {
 
         await Repository.TeamRepo.findByIdAndUpdate(teamId, {$push: {solutions: solution}})
 
-        const verify = new SolutionVerify(new PythonStrategy())
-        await verify.createFile(request.file.buffer, solution.id.toString())
-        const verifyReponse = await verify.test(exercise.tests)
-        await Repository.SolutionRepo.findByIdAndUpdate(solution._id, { status: verifyReponse.status })
+        await SolutionService.verifySolution(solution.id)
     }
 
     async getSession(teamId: string){

@@ -42,21 +42,9 @@ export class SolutionVerify {
                     return reject(e)
                 }
 
-                let inputs = input.match(/[^\r\n]+/g)
                 const outputs: string[] = []
 
                 process.stdin.setDefaultEncoding("utf-8")
-
-                process.stdout.on("data", (data: string) => {
-                    if (!inputs.length) {
-                        process.stdin.end()
-                        outputs.push(data.toString().replace(/(\r\n|\n|\r)*$/, ""))
-                    } else {
-                        const [current, ...rest] = inputs
-                        process.stdin.write(`${current}\n`)
-                        inputs = rest
-                    }
-                })
 
                 process.stderr.on("data", (error) => {
                     reject(formatResponse(SolutionStatus.ERROR_EXECUTION, error))
@@ -76,6 +64,14 @@ export class SolutionVerify {
                         )
                     return resolve(formatResponse(SolutionStatus.CORRECT))
                 })
+
+                process.stdin.write(input)
+                process.stdin.end()
+
+                process.stdout.on("data", (data: string) => {
+                    outputs.push(data.toString().replace(/(\r\n|\n|\r)*$/, ""))
+                })
+
             })
         ))
 

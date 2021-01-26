@@ -53,4 +53,9 @@ export default class Session {
 
     @prop({default: false})
     public isRankingFrozen: boolean
+
+    public isInProgress() {
+        const now = new Date()
+        return now > this.start && now < this.end
+    }
 }
