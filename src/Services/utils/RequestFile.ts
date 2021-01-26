@@ -4,7 +4,7 @@ import {Express, Request} from "express";
 const FILE_SIZE_LIMIT = 2097152
 
 class RequestFile {
-    multer
+    private readonly multer
     constructor(name: string) {
         this.multer = multer({limits: {fileSize: FILE_SIZE_LIMIT}}).single(name)
     }

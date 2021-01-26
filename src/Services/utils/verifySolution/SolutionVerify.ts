@@ -13,8 +13,8 @@ export interface VerifyStrategy {
 }
 
 export class SolutionVerify {
-    filePath: string
-    verifyStrategy: VerifyStrategy
+    private filePath: string
+    private verifyStrategy: VerifyStrategy
     constructor(verifyStrategy: VerifyStrategy) {
         this.verifyStrategy = verifyStrategy
     }
