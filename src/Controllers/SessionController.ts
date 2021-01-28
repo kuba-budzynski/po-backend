@@ -12,7 +12,7 @@ export class SessionController extends Controller {
     @Post()
     public async createSession(
         @Request() request: express.Request
-    ){
+    ): Promise<any> {
         return SessionService.createSession(request.body)
     }
 }
