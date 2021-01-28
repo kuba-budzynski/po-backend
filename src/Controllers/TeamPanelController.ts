@@ -51,7 +51,7 @@ export class TeamPanelController extends Controller {
         @Header() teamId: string,
         @Path() exerciseId: string,
         @Request() request: express.Request,
-    ): Promise<any> {
+    ) {
         return TeamPanelService.createSolution(teamId, exerciseId, request);
     }
 }

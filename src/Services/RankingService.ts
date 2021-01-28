@@ -16,8 +16,8 @@ class RankingService {
         else{
             const teams = (session.teams as DocumentType<Team>[]).map(t => ({
                 id: t._id,
-                completed: t.scores.correct,
-                time: t.scores.time,
+                completed: t.score.correct,
+                time: t.score.time,
                 name: t.name,
                 school: t.schoolName
             }))

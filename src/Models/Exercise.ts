@@ -1,5 +1,4 @@
-import {prop, Ref} from "@typegoose/typegoose";
-import ExerciseJudge from "./ExerciseJudge";
+import {prop} from "@typegoose/typegoose";
 
 export class Test {
     @prop({required: true})
@@ -15,9 +14,6 @@ export class Test {
 
 
 export default class Exercise {
-    @prop({ref: `ExerciseJudge`})
-    public judge?: Ref<ExerciseJudge>
-
     @prop({required: true})
     public content!: string
 

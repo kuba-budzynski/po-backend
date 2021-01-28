@@ -24,7 +24,7 @@ export class SolutionVerify {
         await fsPromises.writeFile(this.filePath, code)
     }
 
-    async deleteFile(path) {
+    async deleteFile(path: string) {
         if (!path) return
         await fsPromises.unlink(path)
     }

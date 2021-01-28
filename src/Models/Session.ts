@@ -1,9 +1,6 @@
 import {prop, Ref} from "@typegoose/typegoose";
 import Team from "./Team";
 import Exercise from "./Exercise";
-import PrimaryJudge from "./PrimaryJudge";
-import ExerciseJudge from "./ExerciseJudge";
-import Thread from "./Thread";
 
 export class Registration {
     @prop({required: false})
@@ -38,15 +35,6 @@ export default class Session {
 
     @prop({required: true, ref: `Exercise`, default: []})
     public exercises!: Ref<Exercise>[]
-
-    @prop({required: true, ref: `Thread`, default: []})
-    public threads!: Ref<Thread>[]
-
-    @prop({ref: `PrimaryJudge`, required: false})
-    public primaryJudges: Ref<PrimaryJudge>
-
-    @prop({ref: `ExerciseJudge`, default: []})
-    public exerciseJudges: Ref<ExerciseJudge>[]
 
     @prop({default: new Registration()})
     public registration: Registration

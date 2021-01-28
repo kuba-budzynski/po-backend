@@ -7,7 +7,7 @@
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
     "test": "npm run build && ava",
     "nodemon": "nodemon",
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./build && tsoa spec-and-routes && tsc",
     "start": "npm run build && node build/index.js"
   },
   "keywords": [],

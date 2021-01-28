@@ -64,7 +64,7 @@ export default class Team extends User {
     public solutions!: Ref<Solution>[]
 
     @prop({required: true, default: new Score()})
-    public scores!: Score
+    public score!: Score
 
     @prop()
     public disqualifiedReason?: string
