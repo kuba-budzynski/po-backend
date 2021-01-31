@@ -1,7 +1,7 @@
 import { DocumentType } from "@typegoose/typegoose";
 import { isValidObjectId } from "mongoose";
 import { BadRequestError } from "../config/handleError";
-import Team from "../Models/Team";
+import Team, { TeamStatus } from "../Models/Team";
 import Repository from "../Repositories/Repository";
 
 
@@ -14,7 +14,8 @@ class RankingService {
         if (!session)
             throw new BadRequestError("Nie znaleziono sesji o podanym id.")
         else{
-            const teams = (session.teams as DocumentType<Team>[]).map(t => ({
+            const validTeams = (session.teams as DocumentType<Team>[]).filter(t => t.status != TeamStatus.DISQUALIFIED )
+            const teams = validTeams.map(t => ({
                 id: t._id,
                 completed: t.score.correct,
                 time: t.score.time,
