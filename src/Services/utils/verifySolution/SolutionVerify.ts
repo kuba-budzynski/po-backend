@@ -58,7 +58,7 @@ export class SolutionVerify {
                     if (output !== receivedOutputs)
                         return reject(
                             formatResponse(
-                                SolutionStatus.ERROR_PRESENTATION,
+                                SolutionStatus.ERROR_EXECUTION,
                                 `Oczekiwane wyjście: ${output}. Otrzymane wyjście: ${receivedOutputs}`
                             )
                         )
