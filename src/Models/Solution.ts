@@ -48,6 +48,10 @@ export default class Solution {
         return this.isStatus(SolutionStatus.CORRECT) || this.isStatus(SolutionStatus.PENDING)
     }
 
+    public isError() {
+        return !this.isBlocking()
+    }
+
     public belongsToExercise(exerciseId: string) {
         return this.exercise.toString() === exerciseId
     }
