@@ -3,11 +3,11 @@
 import {prop} from "@typegoose/typegoose";
 
 export enum UserRole {
-    ADMIN = "admin",
-    USER = "uzytkownik",
-    TEAM = "team",
-    JUDGE_PRIMARY = "sedzia_glowny",
-    JUDGE_EXERCISE = "sedzia_zadania",
+    ADMIN = "ADMIN",
+    USER = "USER",
+    TEAM = "TEAM",
+    JUDGE_PRIMARY = "JUDGE_PRIMARY",
+    JUDGE_EXERCISE = "JUDGE_EXERCISE",
 }
 
 export class LoginData {

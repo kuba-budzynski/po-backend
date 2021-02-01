@@ -4,12 +4,12 @@ import Exercise from "./Exercise";
 
 
 export enum SolutionStatus {
-    PENDING = "oczekujace",
-    CORRECT = "poprawne",
-    ERROR_PRESENTATION = "blad_prezentacji",
-    ERROR_COMPILATION = "blad_kompilacji",
-    ERROR_TIME = "blad_czasowy",
-    ERROR_EXECUTION = "blad_wykonania",
+    PENDING = "PENDING",
+    CORRECT = "CORRECT",
+    ERROR_PRESENTATION = "ERROR_PRESENTATION",
+    ERROR_COMPILATION = "ERROR_COMPILATION",
+    ERROR_TIME = "ERROR_TIME",
+    ERROR_EXECUTION = "ERROR_EXECUTION",
 }
 
 export class SolutionFile {

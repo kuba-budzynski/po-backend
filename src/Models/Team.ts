@@ -4,15 +4,15 @@ import User from "./helpers/User";
 import Solution from "./Solution";
 
 export enum SchoolType {
-    HIGH_SCHOOL = "szkola_srednia",
-    UNIVERSITY = "szkola_wyzsza",
+    HIGH_SCHOOL = "HIGH_SCHOOL",
+    UNIVERSITY = "UNIVERSITY",
 }
 
 export enum TeamStatus {
-    REGISTERED = "zarejestrowana",
-    REJECTED = "odrzucona",
-    QUALIFIED = "zakwalifikowana",
-    DISQUALIFIED = "zdyskwalifikowana",
+    REGISTERED = "REGISTERED",
+    REJECTED = "REJECTED",
+    QUALIFIED = "QUALIFIED",
+    DISQUALIFIED = "DISQUALIFIED",
 }
 
 
