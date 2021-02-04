@@ -61,40 +61,69 @@ test.serial('Is solution being added to collection and team', async (t) => {
     })
 
     const isSolutionFound = await Repository.SolutionRepo.exists({ _id: solution.id })
-    t.is(isSolutionFound, true)
-
     const foundTeam = await Repository.TeamRepo.findById(team.id)
+
+    t.is(isSolutionFound, true)
     t.is(foundTeam.solutions.some((s) => s.toString() === solution.id), true)
 })
 
-test.serial('If added solution belongs to exercise', async (t) => {
-    t.is(solution.belongsToExercise(exercise.id), true)
-    t.is(solution.belongsToExercise('adfdsaggasdf'), false)
+test.serial('If solution does not belong to undefined exercise', async (t) => {
     t.is(solution.belongsToExercise(), false)
 })
 
-test.serial('Solution isStatus', async (t) => {
+test.serial('If solution does not belong to incorrect exercise', async (t) => {
+    t.is(solution.belongsToExercise('adfdsaggasdf'), false)
+})
+
+test.serial('If solution belongs to correct exercise', async (t) => {
+    t.is(solution.belongsToExercise(exercise.id), true)
+})
+
+test.serial('If Solution isStatus checks correctly', async (t) => {
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.PENDING})
     t.is(solution.isStatus(SolutionStatus.PENDING), true)
-    t.is(solution.isStatus(SolutionStatus.ERROR_TIME), false)
-    t.is(solution.isStatus(SolutionStatus.CORRECT), false)
+
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_EXECUTION})
+    t.is(solution.isStatus(SolutionStatus.ERROR_EXECUTION), true)
 
     solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.CORRECT})
     t.is(solution.isStatus(SolutionStatus.CORRECT), true)
+})
+
+test.serial('If Solution false on empty param', async (t) => {
     t.is(solution.isStatus(), false)
 })
 
-test.serial('Solution isBlocking', async (t) => {
+test.serial('If pending solution is blocking', async (t) => {
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.PENDING})
+    t.is(solution.isBlocking(), true)
+})
+
+test.serial('If correct solution is blocking', async (t) => {
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.CORRECT})
+    t.is(solution.isBlocking(), true)
+})
+
+test.serial('If error solution is not blocking', async (t) => {
     solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_EXECUTION})
     t.is(solution.isBlocking(), false)
 
-    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.PENDING})
-    t.is(solution.isBlocking(), true)
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_COMPILATION})
+    t.is(solution.isBlocking(), false)
 
     solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_PRESENTATION})
     t.is(solution.isBlocking(), false)
+})
 
-    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.CORRECT})
-    t.is(solution.isBlocking(), true)
+test.serial('If error solution is error', async (t) => {
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_EXECUTION})
+    t.is(solution.isError(), true)
+
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_COMPILATION})
+    t.is(solution.isError(), true)
+
+    solution = await Repository.SolutionRepo.findByIdAndUpdate(solution._id, {status: SolutionStatus.ERROR_PRESENTATION})
+    t.is(solution.isError(), true)
 })
 
 test.after.always(after)
