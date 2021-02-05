@@ -9,6 +9,13 @@ export type GetExerciseDTO = {
     number: number,
     content: string,
 }
+
+export type GetExercisesDTO = {
+    id: string,
+    name: string,
+    number: number
+}
+
 class ExerciseService {
     async getExercise(exerciseId: string) {
         if (!isValidObjectId(exerciseId))
@@ -34,11 +41,12 @@ class ExerciseService {
             throw new BadRequestError("Nie znaleziono sesji o podanym id.")
         else {
             const exercises = session.exercises as DocumentType<Exercise>[]
-            return exercises.map(e => ({
+            const res: GetExercisesDTO[] = exercises.map(e => ({
                 id: e._id,
                 name: e.name,
                 number: e.number
             }))
+            return res;
         }
     }
 }

@@ -1,6 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import { BadRequestError } from "../config/handleError";
 import Repository from "../Repositories/Repository";
+import Joi from 'joi';
 
 type GroupedSessionList = {
     [year: string]: {
@@ -21,9 +22,26 @@ export type GetSessionListDTO = {
     }[]
 }[];
 
+export type SessonDetailsDTO = {
+    description: string,
+    start: Date,
+    end: Date,
+    isFrozen: boolean 
+}
+
+const sessionValidator = Joi.object({
+    name: Joi.string().max(50).required(),
+    opis: Joi.string().max(250).optional(),
+    allowedExtensions: Joi.string().max(100),
+    start: Joi.date().min(new Date()).required(),
+    end: Joi.date().min(Joi.ref("start")).required()
+})
+
 class SessionService {
     async createSession(request) {
-        return Repository.SessionRepo.create<any>(request)
+        const validation = sessionValidator.validate(request);
+        if(validation.error) throw new BadRequestError(validation.error.message)
+        else return Repository.SessionRepo.create<any>(request)
     }
 
     async getGrouped() {
@@ -56,12 +74,13 @@ class SessionService {
         const session = await Repository.SessionRepo.findById(sessionId);
         if (!session)
             throw new BadRequestError("Nie znaleziono sesji o podanym id.")
-        else return {
+        const res: SessonDetailsDTO = {
             description: session.description,
             start: session.start,
             end: session.end,
             isFrozen: session.isRankingFrozen 
         }
+        return res;
     }
 }
 

@@ -1,7 +1,13 @@
 import {Controller, Get, Path, Route,} from "tsoa";
-import SessionService from "../Services/SessionService";
-import ExerciseService from "../Services/ExerciseService";
-import RankingService from "../Services/RankingService";
+import SessionService, {SessonDetailsDTO} from "../Services/SessionService";
+import ExerciseService, { GetExercisesDTO } from "../Services/ExerciseService";
+import RankingService, { RankingPositionDTO } from "../Services/RankingService";
+
+export type DashboardDTO = {
+    sesja: SessonDetailsDTO,
+    exercises: GetExercisesDTO[],
+    ranking: RankingPositionDTO[]
+}
 
 @Route("dashboard/{sessionId}")
 export class DashboardController extends Controller {
@@ -12,11 +18,12 @@ export class DashboardController extends Controller {
         const sesja = await SessionService.getSession(sessionId);
         const exercises = await ExerciseService.getExercises(sessionId);
         const ranking = await RankingService.getCurrentRanking(sessionId);
-        return {
+        const res: DashboardDTO = {
             exercises: exercises,
             ranking: ranking,
-            sesja: sesja    
+            sesja: sesja
         }
+        return res;
     }
 
 }
