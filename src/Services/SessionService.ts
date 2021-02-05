@@ -31,9 +31,9 @@ export type SessonDetailsDTO = {
 
 const sessionValidator = Joi.object({
     name: Joi.string().max(50).required(),
-    opis: Joi.string().max(250).optional(),
-    allowedExtensions: Joi.string().max(100),
-    start: Joi.date().min(new Date()).required(),
+    description: Joi.string().max(250).optional().allow("", ''),
+    allowedExtensions: Joi.array().items(Joi.string()).max(100),
+    start: Joi.date().required(),
     end: Joi.date().min(Joi.ref("start")).required()
 })
 
